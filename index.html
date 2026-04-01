@@ -1,0 +1,2006 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>TokenForge Pro</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        :root {
+            --bg: #0d0d18;
+            --p1: #141422;
+            --p2: #1c1c30;
+            --p3: #24243c;
+            --bd: #2a2a44;
+            --bd2: #38385a;
+            --ac: #f5c842;
+            --a2: #42b4f5;
+            --a3: #f54286;
+            --a4: #42f59a;
+            --a5: #a042f5;
+            --tx: #dde0f5;
+            --mt: #6868a0;
+            --dg: #f04040;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Arial, sans-serif;
+            font-size: 13px;
+            color: var(--tx);
+            background: var(--bg)
+        }
+
+        #app {
+            display: grid;
+            grid-template-columns: 310px 1fr 290px;
+            grid-template-rows: 50px 1fr 26px;
+            height: 100vh
+        }
+
+        /* HEADER */
+        #hdr {
+            grid-column: 1/-1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 0 14px;
+            background: var(--p1);
+            border-bottom: 1px solid var(--bd);
+            z-index: 100
+        }
+
+        .logo {
+            font-size: 19px;
+            font-weight: 800;
+            letter-spacing: -.5px;
+            white-space: nowrap
+        }
+
+        .logo span {
+            color: var(--ac)
+        }
+
+        .logo sub {
+            font-size: 10px;
+            color: var(--a3);
+            vertical-align: sub
+        }
+
+        .hsp {
+            flex: 1
+        }
+
+        .btn {
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            border: 1px solid transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            transition: all .15s;
+            font-family: inherit;
+            white-space: nowrap
+        }
+
+        .btn:active {
+            transform: scale(.97)
+        }
+
+        .btn-p {
+            background: var(--ac);
+            color: #000;
+            border-color: var(--ac)
+        }
+
+        .btn-p:hover {
+            background: #ffd055
+        }
+
+        .btn-g {
+            background: var(--p2);
+            border-color: var(--bd2);
+            color: var(--tx)
+        }
+
+        .btn-g:hover {
+            border-color: var(--ac);
+            color: var(--ac)
+        }
+
+        .btn-b {
+            background: var(--a2);
+            color: #000
+        }
+
+        .btn-b:hover {
+            background: #70caff
+        }
+
+        .btn-r {
+            background: var(--a3);
+            color: #fff
+        }
+
+        .btn-r:hover {
+            background: #ff70aa
+        }
+
+        .btn-v {
+            background: var(--a5);
+            color: #fff
+        }
+
+        .btn-v:hover {
+            background: #c070ff
+        }
+
+        .btn-gr {
+            background: var(--a4);
+            color: #000
+        }
+
+        .btn-gr:hover {
+            background: #70ffb8
+        }
+
+        .btn-dg {
+            background: #2a1010;
+            border-color: var(--dg);
+            color: var(--dg)
+        }
+
+        .btn-dg:hover {
+            background: #3e1818
+        }
+
+        .btn-sm {
+            padding: 5px 8px;
+            font-size: 10px
+        }
+
+        .btn-xs {
+            padding: 3px 7px;
+            font-size: 10px
+        }
+
+        .btn-full {
+            width: 100%
+        }
+
+        /* SIDEBARS */
+        #sbl,
+        #sbr {
+            background: var(--p1);
+            overflow-y: auto;
+            overflow-x: hidden
+        }
+
+        #sbl {
+            border-right: 1px solid var(--bd)
+        }
+
+        #sbr {
+            border-left: 1px solid var(--bd)
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+            height: 4px
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg)
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--bd2);
+            border-radius: 2px
+        }
+
+        .sec {
+            border-bottom: 1px solid var(--bd);
+            padding: 10px 12px
+        }
+
+        .shd {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--mt);
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .shd a {
+            font-size: 10px;
+            cursor: pointer;
+            color: var(--a2);
+            letter-spacing: 0;
+            text-transform: none
+        }
+
+        label {
+            display: block;
+            font-size: 10px;
+            color: var(--mt);
+            margin-bottom: 3px
+        }
+
+        input[type=text],
+        input[type=number],
+        select,
+        textarea {
+            width: 100%;
+            background: var(--bg);
+            border: 1px solid var(--bd);
+            color: var(--tx);
+            padding: 6px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color .15s
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--ac)
+        }
+
+        select option {
+            background: var(--p2)
+        }
+
+        input[type=color] {
+            width: 100%;
+            height: 28px;
+            border: 1px solid var(--bd);
+            border-radius: 5px;
+            cursor: pointer;
+            background: var(--bg);
+            padding: 1px 3px
+        }
+
+        input[type=range] {
+            width: 100%;
+            accent-color: var(--ac);
+            cursor: pointer
+        }
+
+        input[type=checkbox] {
+            accent-color: var(--ac);
+            cursor: pointer;
+            width: 13px;
+            height: 13px
+        }
+
+        .r2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+            margin-bottom: 7px
+        }
+
+        .r3 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 5px;
+            margin-bottom: 7px
+        }
+
+        .f {
+            margin-bottom: 7px
+        }
+
+        .rrow {
+            display: flex;
+            align-items: center;
+            gap: 6px
+        }
+
+        .rv {
+            font-family: monospace;
+            font-size: 10px;
+            color: var(--ac);
+            width: 36px;
+            text-align: right;
+            flex-shrink: 0
+        }
+
+        .ck {
+            display: flex;
+            gap: 7px;
+            align-items: center;
+            cursor: pointer;
+            font-size: 11px;
+            color: var(--tx)
+        }
+
+        .vs {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .hs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px
+        }
+
+        .tip {
+            background: var(--p2);
+            border-left: 3px solid var(--a2);
+            border-radius: 4px;
+            padding: 7px 9px;
+            font-size: 10px;
+            color: var(--mt);
+            line-height: 1.7;
+            margin-bottom: 7px
+        }
+
+        .tip b {
+            color: var(--a2)
+        }
+
+        .tip.warn {
+            border-left-color: var(--ac)
+        }
+
+        .tip.warn b {
+            color: var(--ac)
+        }
+
+        /* SEGMENT BUILDER */
+        .seg-row {
+            display: grid;
+            grid-template-columns: 1fr 52px 24px;
+            gap: 3px;
+            align-items: center;
+            margin-bottom: 4px
+        }
+
+        .si {
+            background: var(--bg);
+            border: 1px solid var(--bd);
+            color: var(--tx);
+            padding: 5px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-family: monospace
+        }
+
+        .sdel {
+            background: #2a1010;
+            border: 1px solid #6a1020;
+            color: var(--a3);
+            border-radius: 4px;
+            width: 24px;
+            height: 26px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0
+        }
+
+        .sdel:hover {
+            background: #4a1020
+        }
+
+        .fmprev {
+            background: var(--bg);
+            border: 1px solid var(--bd);
+            border-radius: 4px;
+            padding: 5px 9px;
+            font-family: monospace;
+            font-size: 12px;
+            color: var(--a2);
+            text-align: center;
+            min-height: 28px;
+            word-break: break-all;
+            margin-top: 5px;
+            letter-spacing: 1px
+        }
+
+        /* BORDER PICKERS */
+        .bsgrid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3px
+        }
+
+        .bp {
+            background: var(--bg);
+            border: 1px solid var(--bd);
+            border-radius: 4px;
+            padding: 6px 3px;
+            text-align: center;
+            cursor: pointer;
+            font-size: 10px;
+            color: var(--mt);
+            transition: all .15s
+        }
+
+        .bp:hover,
+        .bp.on {
+            border-color: var(--ac);
+            color: var(--ac)
+        }
+
+        /* CANVAS */
+        #carea {
+            background: #06060f;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden
+        }
+
+        #ctb {
+            padding: 6px 10px;
+            background: var(--p1);
+            border-bottom: 1px solid var(--bd);
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: wrap;
+            min-height: 40px
+        }
+
+        .csep {
+            color: var(--bd);
+            margin: 0 3px;
+            font-size: 16px
+        }
+
+        .zbar {
+            display: flex;
+            gap: 3px;
+            align-items: center;
+            margin-left: auto
+        }
+
+        .zv {
+            font-family: monospace;
+            font-size: 11px;
+            color: var(--ac);
+            width: 42px;
+            text-align: center
+        }
+
+        #cwrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: auto;
+            padding: 30px
+        }
+
+        /* TOKEN CARD */
+        .tcard {
+            position: relative;
+            overflow: hidden;
+            flex-shrink: 0;
+            box-shadow: 0 0 0 1px rgba(255, 255, 255, .04), 0 20px 60px rgba(0, 0, 0, .9);
+            cursor: default
+        }
+
+        .blbl {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            z-index: 999;
+            background: rgba(245, 200, 66, .9);
+            color: #000;
+            font-size: 8px;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            pointer-events: none
+        }
+
+        /* ELEMENTS */
+        .tel {
+            position: absolute;
+            cursor: move;
+            transform-origin: center center
+        }
+
+        .tel.sel {
+            outline: 2px solid var(--a2);
+            outline-offset: 2px
+        }
+
+        .tel:hover:not(.sel) {
+            outline: 1px dashed rgba(66, 180, 245, .5);
+            outline-offset: 2px
+        }
+
+        .rh {
+            position: absolute;
+            bottom: -5px;
+            right: -5px;
+            width: 12px;
+            height: 12px;
+            background: var(--a2);
+            border-radius: 2px;
+            cursor: se-resize;
+            z-index: 20
+        }
+
+        .roh {
+            position: absolute;
+            top: -18px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 11px;
+            height: 11px;
+            background: var(--ac);
+            border-radius: 50%;
+            cursor: grab;
+            z-index: 20
+        }
+
+        .roh::after {
+            content: '↻';
+            position: absolute;
+            top: -13px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 9px;
+            color: var(--ac);
+            pointer-events: none
+        }
+
+        /* SIDE TOGGLE */
+        .stog {
+            display: flex;
+            background: var(--bg);
+            border: 1px solid var(--bd);
+            border-radius: 5px;
+            overflow: hidden
+        }
+
+        .sb {
+            flex: 1;
+            padding: 6px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            color: var(--mt);
+            text-align: center;
+            border: none;
+            background: none;
+            transition: all .15s
+        }
+
+        .sb.on {
+            background: var(--ac);
+            color: #000
+        }
+
+        /* TEXT FORMAT BAR */
+        .fmtbar {
+            display: flex;
+            gap: 3px;
+            flex-wrap: wrap;
+            margin-bottom: 6px
+        }
+
+        .fb {
+            padding: 4px 8px;
+            background: var(--bg);
+            border: 1px solid var(--bd);
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 11px;
+            color: var(--mt);
+            transition: all .12s;
+            min-width: 28px;
+            text-align: center
+        }
+
+        .fb:hover,
+        .fb.on {
+            background: var(--p3);
+            border-color: var(--ac);
+            color: var(--ac)
+        }
+
+        /* LAYERS */
+        .li {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 7px;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            margin-bottom: 2px;
+            font-size: 11px
+        }
+
+        .li:hover {
+            background: var(--p2)
+        }
+
+        .li.on {
+            background: var(--p2);
+            border-color: var(--a2)
+        }
+
+        .lname {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            font-size: 10px
+        }
+
+        /* PROPS */
+        .pnone {
+            color: var(--mt);
+            font-size: 11px;
+            text-align: center;
+            padding: 16px 0
+        }
+
+        .psec {
+            background: var(--p2);
+            border: 1px solid var(--bd);
+            border-radius: 5px;
+            padding: 9px 10px;
+            margin-bottom: 7px
+        }
+
+        .phd {
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: var(--mt);
+            text-transform: uppercase;
+            margin-bottom: 8px
+        }
+
+        /* DOWNLOAD GRID */
+        .dlg {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4px
+        }
+
+        /* STATUS BAR */
+        #stb {
+            grid-column: 1/-1;
+            background: var(--p1);
+            border-top: 1px solid var(--bd);
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 0 14px;
+            font-size: 10px;
+            color: var(--mt)
+        }
+
+        #stb b {
+            color: var(--ac);
+            font-family: monospace
+        }
+
+        #stb #stsel {
+            color: var(--a2)
+        }
+
+        /* NOTIFICATIONS */
+        #notif {
+            position: fixed;
+            bottom: 36px;
+            left: 50%;
+            transform: translateX(-50%) translateY(60px);
+            padding: 9px 20px;
+            border-radius: 6px;
+            font-weight: 700;
+            font-size: 12px;
+            z-index: 9999;
+            opacity: 0;
+            transition: all .3s;
+            white-space: nowrap;
+            pointer-events: none
+        }
+
+        #notif.show {
+            transform: translateX(-50%) translateY(0);
+            opacity: 1
+        }
+
+        #notif.ok {
+            background: var(--a4);
+            color: #000
+        }
+
+        #notif.err {
+            background: var(--dg);
+            color: #fff
+        }
+
+        #notif.info {
+            background: var(--ac);
+            color: #000
+        }
+
+        /* CONTEXT MENU */
+        #ctx {
+            position: fixed;
+            background: var(--p1);
+            border: 1px solid var(--bd2);
+            border-radius: 7px;
+            padding: 4px;
+            z-index: 9000;
+            min-width: 148px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, .7);
+            display: none
+        }
+
+        .ci {
+            padding: 7px 11px;
+            font-size: 11px;
+            cursor: pointer;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            gap: 7px
+        }
+
+        .ci:hover {
+            background: var(--p2)
+        }
+
+        .csep {
+            border-top: 1px solid var(--bd);
+            margin: 3px 0
+        }
+
+        /* PROGRESS */
+        #prog {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .8);
+            z-index: 8000;
+            display: none;
+            align-items: center;
+            justify-content: center
+        }
+
+        #prog.show {
+            display: flex
+        }
+
+        #pb {
+            width: 360px;
+            background: var(--p1);
+            border-radius: 10px;
+            padding: 28px;
+            border: 1px solid var(--bd)
+        }
+
+        #pb h3 {
+            margin-bottom: 14px;
+            color: var(--ac);
+            font-size: 16px
+        }
+
+        #pbo {
+            background: var(--bg);
+            border-radius: 4px;
+            height: 10px;
+            overflow: hidden;
+            margin-bottom: 10px
+        }
+
+        #pbi {
+            background: linear-gradient(90deg, var(--ac), var(--a2));
+            height: 100%;
+            border-radius: 4px;
+            width: 0;
+            transition: width .2s
+        }
+
+        #pbt {
+            font-size: 11px;
+            color: var(--mt);
+            font-family: monospace
+        }
+    </style>
+</head>
+
+<body>
+    <div id="app">
+
+        <!-- HEADER -->
+        <header id="hdr">
+            <div class="logo">Token<span>Forge</span><sub>PRO</sub></div>
+            <div class="hsp"></div>
+            <button class="btn btn-g btn-sm" onclick="undo()">↩ Undo</button>
+            <button class="btn btn-g btn-sm" onclick="redo()">↪ Redo</button>
+            <button class="btn btn-p" onclick="doGenerate()">⚡ Generate Tokens</button>
+        </header>
+
+        <!-- LEFT SIDEBAR -->
+        <aside id="sbl">
+
+            <div class="sec">
+                <div class="shd">Editing Side</div>
+                <div class="stog">
+                    <button class="sb on" id="btn-front" onclick="setSide('front')">▶ FRONT</button>
+                    <button class="sb" id="btn-back" onclick="setSide('back')">◀ BACK</button>
+                </div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">Token Format</div>
+                <div id="seglist"></div>
+                <button class="btn btn-g btn-sm btn-full" style="margin-bottom:6px" onclick="addSeg()">+ Add
+                    Segment</button>
+                <div class="fmprev" id="fmprev">—</div>
+                <div class="r2" style="margin-top:7px">
+                    <div class="f"><label>Prefix</label><input type="text" id="pfx" placeholder="TKT-"
+                            oninput="refreshFmt()" maxlength="12"></div>
+                    <div class="f"><label>Suffix</label><input type="text" id="sfx" placeholder="-25"
+                            oninput="refreshFmt()" maxlength="12"></div>
+                </div>
+                <div class="r2">
+                    <div class="f"><label>Start Number</label><input type="number" id="tstart" value="1" min="0"
+                            oninput="refreshFmt()"></div>
+                    <div class="f"><label>Total Count</label><input type="number" id="tcount" value="20" min="1"
+                            max="10000"></div>
+                </div>
+                <div class="tip warn">
+                    <b>Examples:</b><br>
+                    [Numbers:3] → 001…300<br>
+                    [Fixed:ABC]+[Numbers:3] → ABC001<br>
+                    Prefix TKT-+[Numbers:4] → TKT-0001
+                </div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">Add Elements</div>
+                <div class="vs">
+                    <button class="btn btn-g btn-sm" onclick="addText()">✏️ Add Text / Label</button>
+                    <button class="btn btn-g btn-sm" onclick="addTokNum()">🔢 Token Number (auto)</button>
+                    <button class="btn btn-g btn-sm" onclick="addImg()">🖼️ Add Logo / Image</button>
+                    <button class="btn btn-g btn-sm" onclick="addBg()">🌅 Background Photo</button>
+                    <div class="r2" style="margin:0">
+                        <button class="btn btn-g btn-sm" onclick="addShape('rect')">⬛ Rectangle</button>
+                        <button class="btn btn-g btn-sm" onclick="addShape('circle')">⚫ Circle</button>
+                        <button class="btn btn-g btn-sm" onclick="addShape('line')">— Line</button>
+                        <button class="btn btn-g btn-sm" onclick="addShape('tri')">▲ Triangle</button>
+                        <button class="btn btn-g btn-sm" onclick="addShape('star')">⭐ Star</button>
+                        <button class="btn btn-g btn-sm" onclick="addShape('diamond')">◆ Diamond</button>
+                    </div>
+                    <button class="btn btn-b btn-sm" onclick="addQR()">📱 QR Code (auto token)</button>
+                    <button class="btn btn-r btn-sm" onclick="addBC()">📊 Barcode (auto token)</button>
+                </div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">Card Border</div>
+                <div class="r2">
+                    <div class="f"><label>Color</label><input type="color" id="bdc" value="#cccccc"
+                            oninput="updateCard()"></div>
+                    <div class="f"><label>Width</label>
+                        <div class="rrow"><input type="range" id="bdw" min="0" max="14" value="2"
+                                oninput="updateCard()"><span class="rv" id="bdwv">2px</span></div>
+                    </div>
+                </div>
+                <div class="bsgrid">
+                    <div class="bp on" onclick="pickBS(this,'solid')">— Solid</div>
+                    <div class="bp" onclick="pickBS(this,'dashed')">-- Dash</div>
+                    <div class="bp" onclick="pickBS(this,'dotted')">··· Dot</div>
+                    <div class="bp" onclick="pickBS(this,'double')">═ Double</div>
+                    <div class="bp" onclick="pickBS(this,'ridge')">▣ Ridge</div>
+                    <div class="bp" onclick="pickBS(this,'groove')">▥ Groove</div>
+                </div>
+                <div class="f" style="margin-top:7px"><label>Corner Radius</label>
+                    <div class="rrow"><input type="range" id="brad" min="0" max="60" value="8"
+                            oninput="updateCard()"><span class="rv" id="bradv">8px</span></div>
+                </div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">Card Background</div>
+                <div class="r2">
+                    <div class="f"><label>Color 1</label><input type="color" id="bg1" value="#ffffff"
+                            oninput="updateCard()"></div>
+                    <div class="f"><label>Opacity %</label>
+                        <div class="rrow"><input type="range" id="bgop" min="0" max="100" value="100"
+                                oninput="updateCard()"><span class="rv" id="bgopv">100%</span></div>
+                    </div>
+                </div>
+                <div class="f"><label>Style</label>
+                    <select id="bgt" onchange="updateCard()">
+                        <option value="solid">Solid Color</option>
+                        <option value="gl">Gradient Left→Right</option>
+                        <option value="gt">Gradient Top→Bottom</option>
+                        <option value="gd">Gradient Diagonal</option>
+                        <option value="gr">Gradient Radial</option>
+                        <option value="pd">Pattern: Dots</option>
+                        <option value="pl">Pattern: Lines</option>
+                        <option value="pc">Pattern: Cross</option>
+                        <option value="pch">Pattern: Checker</option>
+                    </select>
+                </div>
+                <div class="f" id="bg2row" style="display:none"><label>Color 2</label><input type="color" id="bg2"
+                        value="#dde8ff" oninput="updateCard()"></div>
+            </div>
+
+        </aside>
+
+        <!-- CANVAS CENTER -->
+        <main id="carea">
+            <div id="ctb">
+                <button class="btn btn-g btn-sm" onclick="align('left')" title="Align Left">⬅L</button>
+                <button class="btn btn-g btn-sm" onclick="align('hc')" title="Center H">↔C</button>
+                <button class="btn btn-g btn-sm" onclick="align('right')" title="Align Right">R➡</button>
+                <span class="csep">|</span>
+                <button class="btn btn-g btn-sm" onclick="align('top')" title="Align Top">⬆T</button>
+                <button class="btn btn-g btn-sm" onclick="align('vc')" title="Center V">↕M</button>
+                <button class="btn btn-g btn-sm" onclick="align('bottom')" title="Align Bottom">B⬇</button>
+                <span class="csep">|</span>
+                <button class="btn btn-g btn-sm" onclick="bringFront()">⬆Frt</button>
+                <button class="btn btn-g btn-sm" onclick="sendBack()">⬇Bck</button>
+                <button class="btn btn-g btn-sm" onclick="dupEl()">📋Dup</button>
+                <button class="btn btn-dg btn-sm" onclick="delEl()">🗑Del</button>
+                <div class="zbar">
+                    <button class="btn btn-g btn-sm" onclick="zc(-0.15)">−</button>
+                    <span class="zv" id="zlbl">100%</span>
+                    <button class="btn btn-g btn-sm" onclick="zc(+0.15)">+</button>
+                    <button class="btn btn-g btn-sm" onclick="zfit()">Fit</button>
+                </div>
+            </div>
+            <div id="cwrap" onclick="wclick(event)">
+                <div class="tcard" id="cf" style="width:320px;height:190px;background:#fff"></div>
+                <div class="tcard" id="cb" style="width:320px;height:190px;background:#f0f0f0;display:none">
+                    <div class="blbl">BACK SIDE</div>
+                </div>
+            </div>
+        </main>
+
+        <!-- RIGHT SIDEBAR -->
+        <aside id="sbr">
+
+            <div class="sec">
+                <div class="shd">Card Size</div>
+                <div class="r2">
+                    <div class="f"><label>Width (px)</label><input type="number" id="cw" value="320" min="80" max="900"
+                            onchange="resizeCard()"></div>
+                    <div class="f"><label>Height (px)</label><input type="number" id="ch" value="190" min="60" max="700"
+                            onchange="resizeCard()"></div>
+                </div>
+                <div class="f"><label>Preset Sizes</label>
+                    <select onchange="applyPreset(this.value);this.value=''">
+                        <option value="">— Choose preset —</option>
+                        <option value="322,204">Credit Card (85×54mm)</option>
+                        <option value="340,227">Name Badge (90×60mm)</option>
+                        <option value="756,284">Event Ticket (200×75mm)</option>
+                        <option value="400,400">Square (400px)</option>
+                        <option value="559,397">A6 Postcard</option>
+                        <option value="250,140">Medium Token</option>
+                        <option value="200,120">Small Token</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">Element Properties</div>
+                <div id="props">
+                    <div class="pnone">Click any element on the canvas</div>
+                </div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">Layers <a onclick="renderLayers()">↺</a></div>
+                <div id="layers" style="max-height:170px;overflow-y:auto"></div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">QR Code Settings (Barcode uses token #)</div>
+                <div class="f"><label>QR Link/Text</label>
+                    <select id="qrenc" onchange="toggleQRF(); render()">
+                        <option value="num">Token Number Only</option>
+                        <option value="url">URL + Token Number</option>
+                        <option value="cst">Custom Text + Token</option>
+                    </select>
+                </div>
+                <div class="f" id="qurlrow" style="display:none"><label>URL Prefix</label><input type="text" id="qurl"
+                        placeholder="https://site.com/verify/" oninput="render()"></div>
+                <div class="f" id="qcstrow" style="display:none"><label>Custom Prefix</label><input type="text"
+                        id="qcst" placeholder="TOKEN:" oninput="render()"></div>
+                <div class="r2">
+                    <div class="f"><label>QR Color</label><input type="color" id="qrfg" value="#000000"
+                            oninput="render()"></div>
+                    <div class="f"><label>QR Background</label><input type="color" id="qrbg" value="#ffffff"
+                            oninput="render()"></div>
+                </div>
+                <div class="r2">
+                    <div class="f"><label>Barcode Color</label><input type="color" id="bcfg" value="#000000"
+                            oninput="render()"></div>
+                    <div class="f"><label>Barcode BG</label><input type="color" id="bcbg" value="#ffffff"
+                            oninput="render()"></div>
+                </div>
+                <div class="tip"><b>📱 Scanner → Excel:</b> Download Scanner Excel, open it, click last column, scan any
+                    token → code types itself!</div>
+            </div>
+
+            <div class="sec">
+                <div class="shd">PDF Layout & Download</div>
+                <div class="f"><label>Export Quality</label>
+                    <select id="dlqual">
+                        <option value="1">Standard (72 DPI)</option>
+                        <option value="2" selected>High (144 DPI)</option>
+                        <option value="4">Maximum (288 DPI)</option>
+                        <option value="8">Ultra (576 DPI)</option>
+                    </select>
+                </div>
+                <div class="f"><label>Paper Size</label>
+                    <select id="dlpaper" onchange="updateLayoutPreview()">
+                        <option value="a4p">A4 Portrait (210×297mm)</option>
+                        <option value="a4l">A4 Landscape (297×210mm)</option>
+                        <option value="a3p">A3 Portrait (297×420mm)</option>
+                        <option value="a3l">A3 Landscape (420×297mm)</option>
+                        <option value="ltp">Letter Portrait (215×279mm)</option>
+                        <option value="ltl">Letter Landscape (279×215mm)</option>
+                    </select>
+                </div>
+                <div class="r3">
+                    <div class="f"><label>Columns</label><input type="number" id="dlcols" value="3" min="1" max="20"
+                            oninput="updateLayoutPreview()">
+                    </div>
+                    <div class="f"><label>Per Page</label><input type="number" id="dlpp" value="9" min="1" max="500"
+                            oninput="updateLayoutPreview()">
+                    </div>
+                    <div class="f"><label>Gap (mm)</label><input type="number" id="dlgap" value="4" min="0" max="30"
+                            oninput="updateLayoutPreview()">
+                    </div>
+                </div>
+                <div id="layout-preview"
+                    style="background:#0a0a14;border:1px solid var(--bd);border-radius:4px;width:100%;height:100px;margin-bottom:6px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden">
+                    <div id="lp-page" style="background:#fff;position:relative;box-shadow:0 0 5px rgba(0,0,0,0.5)">
+                    </div>
+                </div>
+                <div class="f"><label class="ck"><input type="checkbox" id="dlback"> Include Back Side in PDF</label>
+                </div>
+                <div class="dlg" style="margin-bottom:5px">
+                    <button class="btn btn-b btn-sm" onclick="dlPDF()">📋 PDF Sheet</button>
+                    <button class="btn btn-g btn-sm" onclick="dlPNG()">🖼️ PNG ZIP</button>
+                    <button class="btn btn-g btn-sm" onclick="dlCSV()">📄 CSV</button>
+                    <button class="btn btn-g btn-sm" onclick="dlXLS()">📊 Excel</button>
+                    <button class="btn btn-g btn-sm" onclick="dlJSON()">📦 JSON</button>
+                    <button class="btn btn-g btn-sm" onclick="dlTXT()">📝 TXT</button>
+                </div>
+                <button class="btn btn-gr btn-sm btn-full" onclick="dlScanner()">📥 Scanner-Ready Excel</button>
+                <div id="dlstat" style="margin-top:6px;font-size:10px;color:var(--a4);min-height:16px"></div>
+            </div>
+
+        </aside>
+
+        <!-- STATUS BAR -->
+        <div id="stb">
+            <span>Format: <b id="stfmt">—</b></span>
+            <span>Count: <b id="stcnt">0</b></span>
+            <span>Card: <b id="stsz">320×190</b></span>
+            <span>Elements: <b id="stel">0</b></span>
+            <span id="stsel"></span>
+        </div>
+
+    </div><!-- #app -->
+
+    <div id="notif"></div>
+    <div id="ctx">
+        <div class="ci" onclick="dupEl()">📋 Duplicate</div>
+        <div class="ci" onclick="bringFront()">⬆ Bring to Front</div>
+        <div class="ci" onclick="sendBack()">⬇ Send to Back</div>
+        <div class="csep"></div>
+        <div class="ci" onclick="align('hc')">↔ Center Horizontal</div>
+        <div class="ci" onclick="align('vc')">↕ Center Vertical</div>
+        <div class="csep"></div>
+        <div class="ci" style="color:var(--dg)" onclick="delEl()">🗑 Delete</div>
+    </div>
+    <div id="prog">
+        <div id="pb">
+            <h3>⚙️ Generating…</h3>
+            <div id="pbo">
+                <div id="pbi"></div>
+            </div>
+            <div id="pbt">Please wait…</div>
+        </div>
+    </div>
+    <canvas id="xc" style="display:none;position:fixed;left:-9999px"></canvas>
+
+    <script>
+        "use strict";
+        // ═══════════════════════════════════════════════════════════
+        // STATE
+        // ═══════════════════════════════════════════════════════════
+        const S = {
+            side: 'front', els: { front: [], back: [] }, segs: [], sel: null,
+            zoom: 1, cw: 320, ch: 190, bstyle: 'solid',
+            tokens: [], undo: [], redo: [], eid: 1,
+            drag: null, rsz: null, rot: null
+        };
+
+        const FONTS = [
+            'Arial', 'Arial Black', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Impact', 'Comic Sans MS',
+            'Times New Roman', 'Georgia', 'Palatino Linotype', 'Book Antiqua', 'Garamond',
+            'Courier New', 'Lucida Console', 'Lucida Sans Unicode', 'Consolas',
+            'Segoe UI', 'Calibri', 'Cambria', 'Century Gothic', 'Candara', 'Franklin Gothic Medium',
+            'Gill Sans MT', 'Rockwell', 'Copperplate Gothic', 'Harrington', 'Snap ITC',
+            'Monospace', 'Serif', 'Sans-Serif'
+        ];
+
+        // ═══════════════════════════════════════════════════════════
+        // UTILITIES
+        // ═══════════════════════════════════════════════════════════
+        const mkId = () => 'e' + (S.eid++);
+        const gEl = id => S.els.front.find(e => e.id === id) || S.els.back.find(e => e.id === id);
+        const gv = id => { const e = document.getElementById(id); return e ? e.value : '' };
+        const gn = id => parseFloat(gv(id)) || 0;
+        const sv = (id, v) => { const e = document.getElementById(id); if (e) e.value = v };
+        const gc = id => { const e = document.getElementById(id); return !!e && e.checked };
+        const esc = s => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+        function notify(msg, type = 'info') {
+            const n = document.getElementById('notif');
+            n.textContent = msg; n.className = type + ' show';
+            clearTimeout(n._t); n._t = setTimeout(() => n.className = '', 3000);
+        }
+        function showProg(on) { document.getElementById('prog').className = on ? 'show' : ''; }
+        function setProg(p, msg) { document.getElementById('pbi').style.width = p + '%'; document.getElementById('pbt').textContent = msg; }
+
+        // ═══════════════════════════════════════════════════════════
+        // UNDO / REDO
+        // ═══════════════════════════════════════════════════════════
+        function saveU() {
+            S.undo.push(JSON.stringify({ els: S.els, segs: S.segs }));
+            if (S.undo.length > 50) S.undo.shift();
+            S.redo = [];
+        }
+        function undo() {
+            if (!S.undo.length) return;
+            S.redo.push(JSON.stringify({ els: S.els, segs: S.segs }));
+            const st = JSON.parse(S.undo.pop()); S.els = st.els; S.segs = st.segs;
+            renderSegs(); render(); notify('Undo');
+        }
+        function redo() {
+            if (!S.redo.length) return;
+            S.undo.push(JSON.stringify({ els: S.els, segs: S.segs }));
+            const st = JSON.parse(S.redo.pop()); S.els = st.els; S.segs = st.segs;
+            renderSegs(); render(); notify('Redo');
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // SIDE TOGGLE
+        // ═══════════════════════════════════════════════════════════
+        function setSide(side) {
+            S.side = side; S.sel = null;
+            document.getElementById('btn-front').className = 'sb' + (side === 'front' ? ' on' : '');
+            document.getElementById('btn-back').className = 'sb' + (side === 'back' ? ' on' : '');
+            document.getElementById('cf').style.display = side === 'front' ? 'block' : 'none';
+            document.getElementById('cb').style.display = side === 'back' ? 'block' : 'none';
+            render(); renderLayers(); updateProps();
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // CARD SIZE / ZOOM
+        // ═══════════════════════════════════════════════════════════
+        function resizeCard() {
+            S.cw = Math.max(80, Math.min(900, gn('cw')));
+            S.ch = Math.max(60, Math.min(700, gn('ch')));
+            applySz(); render();
+            if (typeof updateLayoutPreview === 'function') updateLayoutPreview();
+        }
+        function applySz() {
+            ['cf', 'cb'].forEach(id => { const c = document.getElementById(id); c.style.width = (S.cw * S.zoom) + 'px'; c.style.height = (S.ch * S.zoom) + 'px'; });
+            document.getElementById('stsz').textContent = S.cw + '×' + S.ch;
+        }
+        function applyPreset(v) { if (!v) return; const [w, h] = v.split(',').map(Number); sv('cw', w); sv('ch', h); resizeCard(); }
+        function zc(d) { S.zoom = Math.max(0.1, Math.min(5, S.zoom + d)); document.getElementById('zlbl').textContent = Math.round(S.zoom * 100) + '%'; applySz(); render(); }
+        function zfit() { const w = document.getElementById('cwrap'); S.zoom = Math.min(0.95, (w.clientWidth - 60) / S.cw, (w.clientHeight - 60) / S.ch); document.getElementById('zlbl').textContent = Math.round(S.zoom * 100) + '%'; applySz(); render(); }
+
+        // ═══════════════════════════════════════════════════════════
+        // TOKEN FORMAT / SEGMENTS
+        // ═══════════════════════════════════════════════════════════
+        function addSeg(type, count, fv) {
+            S.segs.push({ id: S.eid++, type: type || 'numbers', count: count || 3, fv: fv || 'ABC' });
+            renderSegs(); refreshFmt();
+        }
+        function remSeg(id) { S.segs = S.segs.filter(s => s.id !== id); renderSegs(); refreshFmt(); }
+        function updSeg(id, k, v) { const s = S.segs.find(x => x.id === id); if (!s) return; s[k] = k === 'count' ? parseInt(v) : v; renderSegs(); refreshFmt(); }
+
+        function renderSegs() {
+            const sb = document.getElementById('seglist'); sb.innerHTML = '';
+            S.segs.forEach(s => {
+                const row = document.createElement('div'); row.className = 'seg-row';
+                const typeOpts = ['numbers', 'upper', 'lower', 'fixed'].map(t =>
+                    `<option value="${t}" ${s.type === t ? 'selected' : ''}>${{ numbers: '🔢 Numbers', upper: '🔠 UPPER', lower: '🔡 lower', fixed: '📌 Fixed' }[t]}</option>`
+                ).join('');
+                const inp = s.type === 'fixed'
+                    ? `<input class="si" type="text" value="${esc(s.fv || '')}" maxlength="12" onchange="updSeg(${s.id},'fv',this.value)">`
+                    : `<input class="si" type="number" value="${s.count}" min="1" max="20" onchange="updSeg(${s.id},'count',this.value)">`;
+                row.innerHTML = `<select class="si" onchange="updSeg(${s.id},'type',this.value)">${typeOpts}</select>${inp}<div class="sdel" onclick="remSeg(${s.id})">×</div>`;
+                sb.appendChild(row);
+            });
+        }
+
+        function getCode(n) {
+            const pre = gv('pfx'), suf = gv('sfx');
+            let r = pre;
+            S.segs.forEach(s => {
+                if (s.type === 'fixed') r += s.fv || '';
+                else if (s.type === 'numbers') r += String(n).padStart(s.count, '0').slice(-s.count);
+                else if (s.type === 'upper') r += n2L(n, s.count, true);
+                else r += n2L(n, s.count, false);
+            });
+            return r + suf;
+        }
+        function n2L(n, c, up) { let r = '', num = n - 1; for (let i = 0; i < c; i++) { r = String.fromCharCode((up ? 65 : 97) + (num % 26)) + r; num = Math.floor(num / 26); } return r; }
+
+        function refreshFmt() {
+            const st = Math.max(0, parseInt(gv('tstart')) || 1);
+            const ex1 = S.segs.length ? getCode(st) : '—';
+            const ex2 = S.segs.length ? getCode(st + 1) : '';
+            document.getElementById('fmprev').textContent = S.segs.length ? `${ex1}  →  ${ex2}  →  …` : 'Add segments above';
+            document.getElementById('stfmt').textContent = ex1;
+            document.getElementById('stcnt').textContent = gv('tcount') || 0;
+            S.els.front.concat(S.els.back).forEach(e => { if (e.et === 'tn') e.text = ex1; });
+            render();
+        }
+
+        function getQRVal(code) {
+            const t = gv('qrenc');
+            if (t === 'url') return (gv('qurl') || '') + code;
+            if (t === 'cst') return (gv('qcst') || '') + code;
+            return code;
+        }
+        function toggleQRF() {
+            const v = gv('qrenc');
+            document.getElementById('qurlrow').style.display = v === 'url' ? 'block' : 'none';
+            document.getElementById('qcstrow').style.display = v === 'cst' ? 'block' : 'none';
+        }
+
+        function doGenerate() {
+            const st = Math.max(0, parseInt(gv('tstart')) || 1);
+            const cnt = Math.min(10000, Math.max(1, parseInt(gv('tcount')) || 20));
+            S.tokens = [];
+            for (let i = 0; i < cnt; i++)S.tokens.push({ serial: st + i, code: getCode(st + i) });
+            document.getElementById('dlstat').textContent = `✓ ${cnt} tokens ready`;
+            notify(`✓ ${cnt} tokens generated!`, 'ok');
+            return S.tokens;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // ADD ELEMENTS
+        // ═══════════════════════════════════════════════════════════
+        function addText(txt, x, y, opts) {
+            const e = Object.assign({
+                id: mkId(), side: S.side, et: 'text',
+                text: txt || 'Your Text Here', x: x ?? 20, y: y ?? 20, w: 190, h: 38,
+                fs: 18, ff: 'Arial', fw: 'bold', fi: false, fu: false, fst: false,
+                fc: '#111111', fa: 'center', ls: 0, lh: 1.25, op: 100, rot: 0, vis: true
+            }, opts || {});
+            S.els[S.side].push(e); saveU(); render(); renderLayers(); selEl(e.id);
+        }
+        function addTokNum(silent) {
+            const st = parseInt(gv('tstart')) || 1;
+            const e = {
+                id: mkId(), side: S.side, et: 'tn',
+                text: S.segs.length ? getCode(st) : 'TOKEN-001',
+                x: Math.round(S.cw / 2) - 85, y: Math.round(S.ch / 2) - 18,
+                w: 170, h: 38, fs: 26, ff: 'Courier New', fw: 'bold', fi: false, fu: false, fst: false,
+                fc: '#1a1aaa', fa: 'center', ls: 0, lh: 1.25, op: 100, rot: 0, vis: true
+            };
+            S.els[S.side].push(e); saveU(); render(); renderLayers(); selEl(e.id);
+            if (!silent) notify('Token Number element added');
+        }
+        function addImg() {
+            pickFile('image/*', (src, nm) => {
+                const e = { id: mkId(), side: S.side, et: 'img', src, nm, x: 8, y: 8, w: 72, h: 46, fit: 'contain', op: 100, rot: 0, vis: true };
+                S.els[S.side].push(e); saveU(); render(); renderLayers(); selEl(e.id); notify('Logo added');
+            });
+        }
+        function addBg() {
+            pickFile('image/*', (src, nm) => {
+                S.els[S.side] = S.els[S.side].filter(e => e.et !== 'bg');
+                const e = { id: mkId(), side: S.side, et: 'bg', src, nm, x: 0, y: 0, w: S.cw, h: S.ch, fit: 'cover', op: 80, rot: 0, vis: true };
+                S.els[S.side].unshift(e); saveU(); render(); renderLayers(); selEl(e.id); notify('Background set');
+            });
+        }
+        function addShape(sh) {
+            const D = {
+                rect: { w: 100, h: 60, fc2: '#4455ff', sc: '#2233aa', sw: 0 },
+                circle: { w: 60, h: 60, fc2: '#ff4455', sc: '#aa2233', sw: 0 },
+                line: { w: 190, h: 4, fc2: '#333', sc: '#333', sw: 2 },
+                tri: { w: 80, h: 65, fc2: '#44bb66', sc: '#228844', sw: 0 },
+                star: { w: 65, h: 65, fc2: '#ffcc00', sc: '#cc9900', sw: 0 },
+                diamond: { w: 60, h: 80, fc2: '#cc44ff', sc: '#8822cc', sw: 0 }
+            };
+            const d = D[sh] || D.rect;
+            S.els[S.side].push(Object.assign({ id: mkId(), side: S.side, et: 'shape', sh, x: 30, y: 30, op: 100, rot: 0, vis: true }, d));
+            saveU(); render(); renderLayers(); selEl(S.els[S.side][S.els[S.side].length - 1].id);
+        }
+        function addQR() {
+            const e = { id: mkId(), side: S.side, et: 'qr', x: S.cw - 82, y: 8, w: 74, h: 74, op: 100, rot: 0, vis: true };
+            S.els[S.side].push(e); saveU(); render(); renderLayers(); selEl(e.id); notify('QR Code added');
+        }
+        function addBC() {
+            const e = { id: mkId(), side: S.side, et: 'bc', x: 8, y: S.ch - 48, w: 175, h: 42, op: 100, rot: 0, vis: true };
+            S.els[S.side].push(e); saveU(); render(); renderLayers(); selEl(e.id); notify('Barcode added');
+        }
+        function pickFile(accept, cb) {
+            const i = document.createElement('input'); i.type = 'file'; i.accept = accept;
+            i.onchange = ev => { const f = ev.target.files[0]; if (!f) return; const r = new FileReader(); r.onload = d => cb(d.target.result, f.name); r.readAsDataURL(f); };
+            i.click();
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // RENDER CANVAS
+        // ═══════════════════════════════════════════════════════════
+        function render() {
+            const st = Math.max(0, parseInt(gv('tstart')) || 1);
+            const prc = S.segs.length ? getCode(st) : 'TOKEN-001';
+            ['front', 'back'].forEach(side => {
+                const card = document.getElementById(side === 'front' ? 'cf' : 'cb');
+                card.innerHTML = '';
+                applyBG(card);
+                S.els[side].forEach(el => { if (!el.vis) return; card.appendChild(mkDOM(el, prc)); });
+                if (side === 'back') { const b = document.createElement('div'); b.className = 'blbl'; b.textContent = 'BACK SIDE'; card.appendChild(b); }
+            });
+            document.getElementById('stel').textContent = S.els[S.side].length;
+            renderLayers();
+        }
+
+        function hexRgba(hex, op) {
+            const r = parseInt(hex.slice(1, 3), 16), g = parseInt(hex.slice(3, 5), 16), b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r},${g},${b},${op})`;
+        }
+
+        function applyBG(card) {
+            const bg1 = gv('bg1') || '#ffffff', bg2 = gv('bg2') || '#dde8ff';
+            const bgt = gv('bgt') || 'solid', op = (parseInt(gv('bgop') ?? 100)) / 100;
+            const bw = parseInt(gv('bdw') ?? 2), bc = gv('bdc') || '#cccccc';
+            const rad = parseInt(gv('brad') || 8);
+            card.style.borderRadius = rad + 'px';
+            card.style.border = bw > 0 ? `${bw}px ${S.bstyle} ${bc}` : 'none';
+            const rgba = hexRgba(bg1, op);
+            const bg = {
+                solid: rgba,
+                gl: `linear-gradient(to right,${rgba},${bg2})`,
+                gt: `linear-gradient(to bottom,${rgba},${bg2})`,
+                gd: `linear-gradient(135deg,${rgba},${bg2})`,
+                gr: `radial-gradient(circle,${rgba},${bg2})`,
+                pd: `radial-gradient(circle,${bg1} 1.5px,transparent 1.5px) 0 0/12px 12px,${bg2}`,
+                pl: `repeating-linear-gradient(45deg,${bg1} 0,${bg1} 1px,${bg2} 1px,${bg2} 9px)`,
+                pc: `linear-gradient(${bg1} 1px,transparent 1px) 0 0/16px 16px,linear-gradient(90deg,${bg1} 1px,transparent 1px) 0 0/16px 16px,${bg2}`,
+                pch: `repeating-conic-gradient(${bg1} 0% 25%,${bg2} 0% 50%) 0 0/20px 20px`
+            }[bgt] || rgba;
+            card.style.background = bg;
+            const bgtv = gv('bgt');
+            document.getElementById('bg2row').style.display = (bgtv !== 'solid') ? 'block' : 'none';
+        }
+
+        function mkDOM(el, code) {
+            const z = S.zoom;
+            const div = document.createElement('div');
+            div.className = 'tel' + (el.id === S.sel ? ' sel' : '');
+            div.dataset.id = el.id;
+            div.style.cssText = `left:${el.x * z}px;top:${el.y * z}px;width:${el.w * z}px;height:${el.h * z}px;` +
+                `transform:rotate(${el.rot || 0}deg);opacity:${(el.op ?? 100) / 100};position:absolute;`;
+
+            if (el.et === 'text' || el.et === 'tn') {
+                div.style.display = 'flex'; div.style.alignItems = 'center'; div.style.overflow = 'hidden';
+                div.style.justifyContent = { left: 'flex-start', right: 'flex-end', center: 'center' }[el.fa] || 'center';
+                const sp = document.createElement('span');
+                const td = []; if (el.fu) td.push('underline'); if (el.fst) td.push('line-through');
+                sp.style.cssText = `font-family:'${el.ff}',sans-serif;font-size:${el.fs * z}px;font-weight:${el.fw};` +
+                    `color:${el.fc};font-style:${el.fi ? 'italic' : 'normal'};text-align:${el.fa};` +
+                    `text-decoration:${td.length ? td.join(' ') : 'none'};letter-spacing:${(el.ls || 0) * z}px;` +
+                    `line-height:${el.lh || 1.25};pointer-events:none;width:100%;word-break:break-word;`;
+                sp.textContent = el.text; div.appendChild(sp);
+            }
+            else if (el.et === 'img' || el.et === 'bg') {
+                div.style.overflow = 'hidden';
+                const img = document.createElement('img'); img.src = el.src; img.draggable = false;
+                img.style.cssText = `width:100%;height:100%;object-fit:${el.fit || 'contain'};pointer-events:none;display:block;`;
+                div.appendChild(img);
+            }
+            else if (el.et === 'shape') { div.appendChild(mkSVG(el)); }
+            else if (el.et === 'qr') {
+                div.style.cssText += ';background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;';
+                try {
+                    const qval = getQRVal(code);
+                    const qcv = makeQR(qval, Math.round(el.w * z), gv('qrfg') || '#000000', gv('qrbg') || '#ffffff');
+                    qcv.style.width = '100%'; qcv.style.height = '100%'; qcv.style.pointerEvents = 'none';
+                    div.style.background = gv('qrbg') || '#ffffff';
+                    div.appendChild(qcv);
+                } catch (e) {
+                    div.innerHTML = `<div style="font-size:${Math.max(8, el.w * z * .09)}px;color:#aaa;text-align:center;pointer-events:none">📱<br><span style="font-size:.8em">QR Error</span></div>`;
+                }
+            }
+            else if (el.et === 'bc') {
+                div.style.cssText += ';background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;';
+                try {
+                    const bval = code;
+                    const bcv = makeBC(bval, Math.round(el.w * z), Math.round(el.h * z), gv('bcfg') || '#000000', gv('bcbg') || '#ffffff');
+                    bcv.style.width = '100%'; bcv.style.height = '100%'; bcv.style.pointerEvents = 'none';
+                    div.style.background = gv('bcbg') || '#ffffff';
+                    div.appendChild(bcv);
+                } catch (e) {
+                    div.innerHTML = `<div style="font-size:${Math.max(7, 9 * z)}px;color:#aaa;text-align:center;pointer-events:none">📊<br><span style="font-size:.8em">Barcode Error</span></div>`;
+                }
+            }
+
+            if (el.id === S.sel) {
+                const rh = document.createElement('div'); rh.className = 'rh'; div.appendChild(rh);
+                const roh = document.createElement('div'); roh.className = 'roh'; div.appendChild(roh);
+            }
+            div.addEventListener('mousedown', ev => startDrag(ev, el.id));
+            div.addEventListener('contextmenu', ev => { ev.preventDefault(); ev.stopPropagation(); showCtx(ev); selEl(el.id); });
+            return div;
+        }
+
+        function mkSVG(el) {
+            const z = S.zoom, w = el.w * z, h = el.h * z, sw = el.sw || 0;
+            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+            svg.setAttribute('width', '100%'); svg.setAttribute('height', '100%');
+            svg.style.cssText = 'overflow:visible;pointer-events:none;';
+            const sa = (e, a) => Object.entries(a).forEach(([k, v]) => e.setAttribute(k, v));
+            const ap = nm => { const p = document.createElementNS('http://www.w3.org/2000/svg', 'polygon'); sa(p, { points: nm, fill: el.fc2, stroke: el.sc, 'stroke-width': sw }); return p; };
+            if (el.sh === 'rect') { const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); sa(r, { x: sw / 2, y: sw / 2, width: w - sw, height: h - sw, fill: el.fc2, stroke: el.sc, 'stroke-width': sw }); svg.appendChild(r); }
+            else if (el.sh === 'circle') { const c = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse'); sa(c, { cx: w / 2, cy: h / 2, rx: w / 2 - sw / 2, ry: h / 2 - sw / 2, fill: el.fc2, stroke: el.sc, 'stroke-width': sw }); svg.appendChild(c); }
+            else if (el.sh === 'line') { const l = document.createElementNS('http://www.w3.org/2000/svg', 'line'); sa(l, { x1: 0, y1: h / 2, x2: w, y2: h / 2, stroke: el.fc2, 'stroke-width': h }); svg.appendChild(l); }
+            else if (el.sh === 'tri') svg.appendChild(ap(`${w / 2},${sw} ${w - sw},${h - sw} ${sw},${h - sw}`));
+            else if (el.sh === 'star') { const or = Math.min(w, h) / 2 - sw, ir = or * 0.4; const pts = Array.from({ length: 10 }, (_, i) => { const r = i % 2 ? ir : or, a = (Math.PI / 5) * i - Math.PI / 2; return `${w / 2 + r * Math.cos(a)},${h / 2 + r * Math.sin(a)}`; }).join(' '); svg.appendChild(ap(pts)); }
+            else if (el.sh === 'diamond') svg.appendChild(ap(`${w / 2},${sw} ${w - sw},${h / 2} ${w / 2},${h - sw} ${sw},${h / 2}`));
+            return svg;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // DRAG / RESIZE / ROTATE
+        // ═══════════════════════════════════════════════════════════
+        function startDrag(ev, id) {
+            if (ev.button !== 0) return; ev.preventDefault(); ev.stopPropagation();
+            selEl(id); const el = gEl(id); if (!el) return; const t = ev.target;
+            if (t.classList.contains('rh')) {
+                S.rsz = { id, sx: ev.clientX, sy: ev.clientY, ow: el.w, oh: el.h };
+                document.addEventListener('mousemove', doRsz); document.addEventListener('mouseup', stopRsz);
+            } else if (t.classList.contains('roh')) {
+                const d = document.querySelector(`[data-id="${id}"]`); const rc = d.getBoundingClientRect();
+                S.rot = { id, cx: rc.left + rc.width / 2, cy: rc.top + rc.height / 2 };
+                document.addEventListener('mousemove', doRot); document.addEventListener('mouseup', stopRot);
+            } else {
+                S.drag = { id, sx: ev.clientX, sy: ev.clientY, ox: el.x, oy: el.y };
+                document.addEventListener('mousemove', doDrag); document.addEventListener('mouseup', stopDrag);
+            }
+        }
+        function doDrag(ev) { if (!S.drag) return; const el = gEl(S.drag.id); if (!el) return; el.x = S.drag.ox + (ev.clientX - S.drag.sx) / S.zoom; el.y = S.drag.oy + (ev.clientY - S.drag.sy) / S.zoom; const d = document.querySelector(`[data-id="${S.drag.id}"]`); if (d) { d.style.left = el.x * S.zoom + 'px'; d.style.top = el.y * S.zoom + 'px'; } }
+        function stopDrag() { if (S.drag) { saveU(); updateProps(); } S.drag = null; document.removeEventListener('mousemove', doDrag); document.removeEventListener('mouseup', stopDrag); }
+        function doRsz(ev) { if (!S.rsz) return; const el = gEl(S.rsz.id); if (!el) return; el.w = Math.max(10, S.rsz.ow + (ev.clientX - S.rsz.sx) / S.zoom); el.h = Math.max(10, S.rsz.oh + (ev.clientY - S.rsz.sy) / S.zoom); render(); updateProps(); }
+        function stopRsz() { if (S.rsz) saveU(); S.rsz = null; document.removeEventListener('mousemove', doRsz); document.removeEventListener('mouseup', stopRsz); }
+        function doRot(ev) { if (!S.rot) return; const el = gEl(S.rot.id); if (!el) return; el.rot = Math.round(Math.atan2(ev.clientY - S.rot.cy, ev.clientX - S.rot.cx) * 180 / Math.PI + 90); const d = document.querySelector(`[data-id="${S.rot.id}"]`); if (d) d.style.transform = `rotate(${el.rot}deg)`; }
+        function stopRot() { if (S.rot) { saveU(); updateProps(); } S.rot = null; document.removeEventListener('mousemove', doRot); document.removeEventListener('mouseup', stopRot); }
+
+        function wclick(ev) { if (ev.target.id === 'cwrap' || ev.target.classList.contains('tcard')) { S.sel = null; render(); updateProps(); } hideCtx(); }
+
+        // ═══════════════════════════════════════════════════════════
+        // SELECT / PROPERTIES
+        // ═══════════════════════════════════════════════════════════
+        function selEl(id) { S.sel = id; render(); updateProps(); const el = gEl(id); document.getElementById('stsel').textContent = el ? '▶ ' + el.et.toUpperCase() + ' selected' : ''; }
+
+        function updateProps() {
+            const pp = document.getElementById('props');
+            const el = gEl(S.sel);
+            if (!el) { pp.innerHTML = '<div class="pnone">Click any element on the canvas</div>'; return; }
+            let h = `<div class="psec"><div class="phd">📐 Position & Size</div>
+    <div class="r2">
+      <div class="f"><label>X</label><input type="number" value="${Math.round(el.x)}" onchange="sp('x',+this.value)"></div>
+      <div class="f"><label>Y</label><input type="number" value="${Math.round(el.y)}" onchange="sp('y',+this.value)"></div>
+    </div>
+    <div class="r2">
+      <div class="f"><label>Width</label><input type="number" value="${Math.round(el.w)}" min="2" onchange="sp('w',+this.value)"></div>
+      <div class="f"><label>Height</label><input type="number" value="${Math.round(el.h)}" min="2" onchange="sp('h',+this.value)"></div>
+    </div>
+    <div class="r2">
+      <div class="f"><label>Rotate °</label><input type="number" value="${el.rot || 0}" onchange="sp('rot',+this.value)"></div>
+      <div class="f"><label>Opacity %</label><input type="number" value="${el.op ?? 100}" min="0" max="100" onchange="sp('op',+this.value)"></div>
+    </div></div>`;
+
+            if (el.et === 'text' || el.et === 'tn') {
+                h += `<div class="psec"><div class="phd">✏️ Text Style</div>
+      <div class="f"><label>Content ${el.et === 'tn' ? '<em style="color:var(--a2);font-style:normal;font-size:9px">(auto from token format)</em>' : ''}</label>
+        <input type="text" value="${esc(el.text)}" ${el.et === 'tn' ? 'disabled' : ''} onchange="sp('text',this.value)">
+      </div>
+      <div class="fmtbar">
+        <button class="fb ${el.fw === 'bold' ? 'on' : ''}" onclick="tf('fw','bold','normal')" title="Bold"><b>B</b></button>
+        <button class="fb ${el.fi ? 'on' : ''}" onclick="tb('fi')" title="Italic"><i>I</i></button>
+        <button class="fb ${el.fu ? 'on' : ''}" onclick="tb('fu')" title="Underline"><u>U</u></button>
+        <button class="fb ${el.fst ? 'on' : ''}" onclick="tb('fst')" title="Strikethrough"><s>S</s></button>
+        <button class="fb ${el.fa === 'left' ? 'on' : ''}" onclick="sp('fa','left')">⬅</button>
+        <button class="fb ${el.fa === 'center' ? 'on' : ''}" onclick="sp('fa','center')">↔</button>
+        <button class="fb ${el.fa === 'right' ? 'on' : ''}" onclick="sp('fa','right')">➡</button>
+      </div>
+      <div class="r2">
+        <div class="f"><label>Font Size (px)</label><input type="number" value="${el.fs}" min="4" max="300" onchange="sp('fs',+this.value)"></div>
+        <div class="f"><label>Text Color</label><input type="color" value="${el.fc}" oninput="sp('fc',this.value)"></div>
+      </div>
+      <div class="f"><label>Font Family (${FONTS.length} fonts)</label>
+        <select onchange="sp('ff',this.value)">${FONTS.map(f => `<option value="${f}" ${el.ff === f ? 'selected' : ''}>${f}</option>`).join('')}</select>
+      </div>
+      <div class="r2">
+        <div class="f"><label>Letter Spacing</label><input type="number" value="${el.ls || 0}" step="0.5" onchange="sp('ls',+this.value)"></div>
+        <div class="f"><label>Line Height</label><input type="number" value="${el.lh || 1.25}" step="0.05" min="0.5" max="5" onchange="sp('lh',+this.value)"></div>
+      </div></div>`;
+            }
+            if (el.et === 'shape') {
+                h += `<div class="psec"><div class="phd">🎨 Shape</div>
+      <div class="r2">
+        <div class="f"><label>Fill</label><input type="color" value="${el.fc2}" oninput="sp('fc2',this.value)"></div>
+        <div class="f"><label>Stroke</label><input type="color" value="${el.sc}" oninput="sp('sc',this.value)"></div>
+      </div>
+      <div class="f"><label>Stroke Width</label><input type="number" value="${el.sw || 0}" min="0" max="30" onchange="sp('sw',+this.value)"></div></div>`;
+            }
+            if (el.et === 'img' || el.et === 'bg') {
+                h += `<div class="psec"><div class="phd">🖼️ Image</div>
+      <div class="f"><label>Fit</label><select onchange="sp('fit',this.value)">
+        <option ${(el.fit || 'contain') === 'contain' ? 'selected' : ''} value="contain">Contain</option>
+        <option ${el.fit === 'cover' ? 'selected' : ''} value="cover">Cover (crop)</option>
+        <option ${el.fit === 'fill' ? 'selected' : ''} value="fill">Stretch</option>
+      </select></div></div>`;
+            }
+            h += `<div class="hs" style="margin-top:4px">
+    <button class="btn btn-g btn-xs" onclick="dupEl()">📋</button>
+    <button class="btn btn-g btn-xs" onclick="bringFront()">⬆Frt</button>
+    <button class="btn btn-g btn-xs" onclick="sendBack()">⬇Bck</button>
+    <button class="btn btn-dg btn-xs" onclick="delEl()">🗑 Del</button></div>`;
+            pp.innerHTML = h;
+        }
+        function sp(k, v) { const el = gEl(S.sel); if (!el) return; el[k] = v; render(); updateProps(); }
+        function tf(k, a, b) { const el = gEl(S.sel); if (!el) return; el[k] = el[k] === a ? b : a; render(); updateProps(); }
+        function tb(k) { const el = gEl(S.sel); if (!el) return; el[k] = !el[k]; render(); updateProps(); }
+
+        // ═══════════════════════════════════════════════════════════
+        // LAYERS
+        // ═══════════════════════════════════════════════════════════
+        function renderLayers() {
+            const ll = document.getElementById('layers'); ll.innerHTML = '';
+            const arr = [...S.els[S.side]].reverse();
+            if (!arr.length) { ll.innerHTML = '<div class="pnone" style="font-size:10px">No elements</div>'; return; }
+            const ic = { text: '✏️', tn: '🔢', img: '🖼️', bg: '🌅', shape: '⬛', qr: '📱', bc: '📊' };
+            arr.forEach(el => {
+                const d = document.createElement('div'); d.className = 'li' + (el.id === S.sel ? ' on' : ''); d.onclick = () => selEl(el.id);
+                d.innerHTML = `<span style="font-size:12px">${ic[el.et] || '•'}</span><span class="lname">${(el.et === 'text' || el.et === 'tn') ? esc(el.text || '').substring(0, 16) : el.et.toUpperCase()}</span><span style="cursor:pointer;color:var(--mt);font-size:11px;padding:2px" onclick="event.stopPropagation();el.vis=!el.vis;render()">${el.vis ? '👁' : '🚫'}</span>`;
+                ll.appendChild(d);
+            });
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // ELEMENT ACTIONS
+        // ═══════════════════════════════════════════════════════════
+        function delEl() { if (!S.sel) return; S.els.front = S.els.front.filter(e => e.id !== S.sel); S.els.back = S.els.back.filter(e => e.id !== S.sel); S.sel = null; saveU(); render(); updateProps(); }
+        function dupEl() { const el = gEl(S.sel); if (!el) return; const cp = JSON.parse(JSON.stringify(el)); cp.id = mkId(); cp.x += 14; cp.y += 14; S.els[el.side || S.side].push(cp); saveU(); render(); renderLayers(); selEl(cp.id); }
+        function bringFront() { const el = gEl(S.sel); if (!el) return; const s = el.side || S.side; S.els[s] = S.els[s].filter(e => e.id !== S.sel); S.els[s].push(el); saveU(); render(); }
+        function sendBack() { const el = gEl(S.sel); if (!el) return; const s = el.side || S.side; S.els[s] = S.els[s].filter(e => e.id !== S.sel); S.els[s].unshift(el); saveU(); render(); }
+        function align(dir) {
+            const el = gEl(S.sel); if (!el) return;
+            if (dir === 'left') el.x = 0; else if (dir === 'right') el.x = S.cw - el.w; else if (dir === 'hc') el.x = (S.cw - el.w) / 2;
+            else if (dir === 'top') el.y = 0; else if (dir === 'bottom') el.y = S.ch - el.h; else if (dir === 'vc') el.y = (S.ch - el.h) / 2;
+            saveU(); render(); updateProps();
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // CARD STYLE
+        // ═══════════════════════════════════════════════════════════
+        function updateCard() {
+            document.getElementById('bdwv').textContent = gv('bdw') + 'px';
+            document.getElementById('bradv').textContent = gv('brad') + 'px';
+            document.getElementById('bgopv').textContent = gv('bgop') + '%';
+            render();
+        }
+        function pickBS(el, s) { document.querySelectorAll('.bp').forEach(x => x.classList.remove('on')); el.classList.add('on'); S.bstyle = s; render(); }
+
+        // ═══════════════════════════════════════════════════════════
+        // CONTEXT MENU
+        // ═══════════════════════════════════════════════════════════
+        function showCtx(ev) { const m = document.getElementById('ctx'); m.style.display = 'block'; m.style.left = (ev.clientX + 150 > window.innerWidth ? ev.clientX - 150 : ev.clientX) + 'px'; m.style.top = (ev.clientY + 180 > window.innerHeight ? ev.clientY - 180 : ev.clientY) + 'px'; }
+        function hideCtx() { document.getElementById('ctx').style.display = 'none'; }
+        document.addEventListener('click', hideCtx);
+
+        // ═══════════════════════════════════════════════════════════
+        // KEYBOARD SHORTCUTS
+        // ═══════════════════════════════════════════════════════════
+        document.addEventListener('keydown', ev => {
+            const ae = document.activeElement;
+            if (ae && ['INPUT', 'SELECT', 'TEXTAREA'].includes(ae.tagName)) return;
+            const el = gEl(S.sel); const s = ev.shiftKey ? 10 : 1;
+            if (el) {
+                if (ev.key === 'ArrowLeft') { el.x -= s; render(); ev.preventDefault(); }
+                if (ev.key === 'ArrowRight') { el.x += s; render(); ev.preventDefault(); }
+                if (ev.key === 'ArrowUp') { el.y -= s; render(); ev.preventDefault(); }
+                if (ev.key === 'ArrowDown') { el.y += s; render(); ev.preventDefault(); }
+                if (ev.key === 'Delete' || ev.key === 'Backspace') delEl();
+                if ((ev.ctrlKey || ev.metaKey) && ev.key === 'd') { ev.preventDefault(); dupEl(); }
+            }
+            if ((ev.ctrlKey || ev.metaKey) && ev.key === 'z') { ev.preventDefault(); undo(); }
+            if ((ev.ctrlKey || ev.metaKey) && ev.key === 'y') { ev.preventDefault(); redo(); }
+        });
+
+        // ═══════════════════════════════════════════════════════════
+        // QR CODE GENERATOR (via qrcode-generator lib)
+        // ═══════════════════════════════════════════════════════════
+        function makeQR(text, px, fg, bg) {
+            const cv = document.createElement('canvas'); cv.width = px; cv.height = px;
+            const ctx = cv.getContext('2d'); ctx.fillStyle = bg || '#fff'; ctx.fillRect(0, 0, px, px);
+            try {
+                const qr = qrcode(0, 'M');
+                qr.addData(text || ' ');
+                qr.make();
+                const count = qr.getModuleCount();
+                const cs = px / count;
+                ctx.fillStyle = fg || '#000';
+                for (let r = 0; r < count; r++) {
+                    for (let c = 0; c < count; c++) {
+                        if (qr.isDark(r, c)) ctx.fillRect(Math.floor(c * cs), Math.floor(r * cs), Math.ceil(cs), Math.ceil(cs));
+                    }
+                }
+            }
+            catch (e) {
+                ctx.fillStyle = '#aaa'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+                ctx.font = '16px sans-serif'; ctx.fillText('QR Error', px / 2, px / 2);
+            }
+            return cv;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // BARCODE (Code 128B)
+        // ═══════════════════════════════════════════════════════════
+        function makeBC(text, w, h, fg, bg) {
+            const P = ['11011001100', '11001101100', '11001100110', '10010011000', '10010001100', '10001001100', '10011001000', '10011000100', '10001100100', '11001001000', '11001000100', '11000100100', '10110011100', '10011011100', '10011001110', '10111001100', '10011101100', '10011100110', '11001110010', '11001011100', '11001001110', '11011100100', '11001110100', '11101101110', '11101001100', '11100101100', '11100100110', '11101100100', '11100110100', '11100110010', '11011011000', '11011000110', '11000110110', '10100011000', '10001011000', '10001000110', '10110001000', '10001101000', '10001100010', '11010001000', '11000101000', '11000100010', '10110111000', '10110001110', '10001101110', '10111011000', '10111000110', '10001110110', '11101110110', '11010001110', '11000101110', '11011101000', '11011100010', '11011101110', '11101011000', '11101000110', '11100010110', '11101101000', '11101100010', '11100011010', '11101111010', '11001000010', '11110001010', '10100110000', '10100001100', '10010110000', '10010000110', '10000101100', '10000100110', '10110010000', '10110000100', '10011010000', '10011000010', '10000110100', '10000110010', '11000010010', '11001010000', '11110111010', '11000010100', '10001111010', '10100111100', '10010111100', '10010011110', '10111100100', '10011110100', '10011110010', '11110100100', '11110010100', '11110010010', '11011011110', '11011110110', '11110110110', '10101111000', '10100011110', '10001011110', '10111101000', '10111100010', '11110101000', '11110100010', '10111011110', '10111101110', '11101011110', '11110101110', '11010000100', '11010010000', '11010011100'];
+            const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+            const ctx = cv.getContext('2d'); ctx.fillStyle = bg || '#fff'; ctx.fillRect(0, 0, w, h);
+            let bars = '11010010000'; let cs = 104;
+            for (let i = 0; i < text.length; i++) { const c = Math.max(0, Math.min(95, text.charCodeAt(i) - 32)); cs += (i + 1) * c; bars += P[c] || P[0]; }
+            bars += P[cs % 103]; bars += '1100011101011';
+            const bw = Math.max(1, Math.floor(w * 0.88 / bars.length));
+            const bz = bw * bars.length;
+            const sx = Math.floor((w - bz) / 2), bh = h * 0.78;
+            ctx.fillStyle = fg || '#000';
+            ctx.imageSmoothingEnabled = false;
+            for (let i = 0; i < bars.length; i++)if (bars[i] === '1') ctx.fillRect(sx + i * bw, 0, bw, bh);
+            const fs = Math.max(7, Math.min(13, h * 0.15)); ctx.font = `${fs}px 'Courier New',monospace`; ctx.textAlign = 'center'; ctx.textBaseline = 'bottom'; ctx.fillStyle = fg || '#000';
+            ctx.fillText(text.length > 26 ? text.substring(0, 24) + '…' : text, w / 2, h);
+            return cv;
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // DRAW TOKEN TO CANVAS (for export)
+        // ═══════════════════════════════════════════════════════════
+        const _ic = {};
+        function loadI(src) {
+            if (_ic[src]) return Promise.resolve(_ic[src]);
+            return new Promise(res => { const i = new Image(); i.onload = () => { _ic[src] = i; res(i); }; i.onerror = () => res(null); i.src = src; });
+        }
+        function rrect(ctx, x, y, w, h, r) {
+            r = Math.min(r, w / 2, h / 2, 30);
+            if (r <= 0) { ctx.rect(x, y, w, h); return; }
+            ctx.beginPath(); ctx.moveTo(x + r, y); ctx.lineTo(x + w - r, y); ctx.arcTo(x + w, y, x + w, y + r, r); ctx.lineTo(x + w, y + h - r); ctx.arcTo(x + w, y + h, x + w - r, y + h, r); ctx.lineTo(x + r, y + h); ctx.arcTo(x, y + h, x, y + h - r, r); ctx.lineTo(x, y + r); ctx.arcTo(x, y, x + r, y, r); ctx.closePath();
+        }
+
+        async function drawTok(xc, code, side, sc = 2) {
+            xc.width = S.cw * sc; xc.height = S.ch * sc;
+            const ctx = xc.getContext('2d'); ctx.save(); ctx.scale(sc, sc); ctx.clearRect(0, 0, S.cw, S.ch);
+            const bg1 = gv('bg1') || '#ffffff', bg2 = gv('bg2') || '#dde8ff';
+            const bgt = gv('bgt') || 'solid', op = (parseInt(gv('bgop') ?? 100)) / 100;
+            const rad = Math.max(0, parseInt(gv('brad') || 0));
+            ctx.save(); rrect(ctx, 0, 0, S.cw, S.ch, rad); ctx.clip();
+            const rgba = hexRgba(bg1, op);
+            if (bgt === 'solid') { ctx.fillStyle = rgba; ctx.fillRect(0, 0, S.cw, S.ch); }
+            else if (bgt === 'gl' || bgt === 'gt' || bgt === 'gd') {
+                const g = bgt === 'gl' ? ctx.createLinearGradient(0, 0, S.cw, 0) : bgt === 'gt' ? ctx.createLinearGradient(0, 0, 0, S.ch) : ctx.createLinearGradient(0, 0, S.cw, S.ch);
+                g.addColorStop(0, rgba); g.addColorStop(1, bg2); ctx.fillStyle = g; ctx.fillRect(0, 0, S.cw, S.ch);
+            } else if (bgt === 'gr') { const g = ctx.createRadialGradient(S.cw / 2, S.ch / 2, 0, S.cw / 2, S.ch / 2, Math.max(S.cw, S.ch) / 1.5); g.addColorStop(0, rgba); g.addColorStop(1, bg2); ctx.fillStyle = g; ctx.fillRect(0, 0, S.cw, S.ch); }
+            else { ctx.fillStyle = bg2; ctx.fillRect(0, 0, S.cw, S.ch); }
+            for (const el of (S.els[side] || [])) {
+                if (!el.vis) continue; ctx.save(); ctx.globalAlpha = (el.op ?? 100) / 100;
+                const cx = el.x + el.w / 2, cy = el.y + el.h / 2; ctx.translate(cx, cy); ctx.rotate((el.rot || 0) * Math.PI / 180); ctx.translate(-cx, -cy);
+                await drawEl(ctx, el, code); ctx.restore();
+            }
+            ctx.restore();
+            const bw = parseInt(gv('bdw') || 0), bc = gv('bdc') || '#ccc';
+            if (bw > 0) { ctx.strokeStyle = bc; ctx.lineWidth = bw; rrect(ctx, bw / 2, bw / 2, S.cw - bw, S.ch - bw, rad); ctx.stroke(); }
+            ctx.restore();
+        }
+
+        async function drawEl(ctx, el, code) {
+            if (el.et === 'bg' || el.et === 'img') {
+                const img = await loadI(el.src); if (!img) return;
+                const fit = el.fit || 'contain';
+                if (fit === 'fill') { ctx.drawImage(img, el.x, el.y, el.w, el.h); }
+                else if (fit === 'cover') { const r = Math.max(el.w / img.width, el.h / img.height); const dw = img.width * r, dh = img.height * r; ctx.drawImage(img, el.x + (el.w - dw) / 2, el.y + (el.h - dh) / 2, dw, dh); }
+                else { const r = Math.min(el.w / img.width, el.h / img.height); const dw = img.width * r, dh = img.height * r; ctx.drawImage(img, el.x + (el.w - dw) / 2, el.y + (el.h - dh) / 2, dw, dh); }
+            }
+            else if (el.et === 'text' || el.et === 'tn') {
+                const txt = el.et === 'tn' ? code : el.text;
+                const td = []; if (el.fu) td.push('underline'); if (el.fst) td.push('line-through');
+                ctx.fillStyle = el.fc; ctx.font = `${el.fi ? 'italic ' : ''} ${el.fw} ${el.fs}px "${el.ff}",sans-serif`;
+                ctx.textAlign = el.fa || 'center'; ctx.textBaseline = 'middle';
+                if (el.ls) ctx.letterSpacing = el.ls + 'px';
+                const ta = el.fa || 'center'; const tx = ta === 'left' ? el.x : ta === 'right' ? el.x + el.w : el.x + el.w / 2;
+                const lines = String(txt).split('\n'); const lh = (el.lh || 1.25) * el.fs;
+                lines.forEach((line, i) => { const ty = el.y + el.h / 2 - ((lines.length - 1) * lh) / 2 + i * lh; ctx.fillText(line, tx, ty); });
+                ctx.letterSpacing = '';
+            }
+            else if (el.et === 'shape') { drawShape(ctx, el); }
+            else if (el.et === 'qr') {
+                const val = getQRVal(code); const px = Math.round(el.w * 2);
+                const qcv = makeQR(val, px, gv('qrfg') || '#000000', gv('qrbg') || '#ffffff');
+                ctx.drawImage(qcv, el.x, el.y, el.w, el.h);
+            }
+            else if (el.et === 'bc') {
+                const val = code;
+                const bcv = makeBC(val, Math.round(el.w * 2), Math.round(el.h * 2), gv('bcfg') || '#000000', gv('bcbg') || '#ffffff');
+                ctx.drawImage(bcv, el.x, el.y, el.w, el.h);
+            }
+        }
+
+        function drawShape(ctx, el) {
+            ctx.fillStyle = el.fc2; ctx.strokeStyle = el.sc; ctx.lineWidth = el.sw || 0; const sw = el.sw || 0;
+            if (el.sh === 'rect') { ctx.fillRect(el.x, el.y, el.w, el.h); if (sw) ctx.strokeRect(el.x, el.y, el.w, el.h); }
+            else if (el.sh === 'circle') { ctx.beginPath(); ctx.ellipse(el.x + el.w / 2, el.y + el.h / 2, el.w / 2 - sw / 2, el.h / 2 - sw / 2, 0, 0, Math.PI * 2); ctx.fill(); if (sw) ctx.stroke(); }
+            else if (el.sh === 'line') { ctx.strokeStyle = el.fc2; ctx.lineWidth = el.h; ctx.beginPath(); ctx.moveTo(el.x, el.y + el.h / 2); ctx.lineTo(el.x + el.w, el.y + el.h / 2); ctx.stroke(); }
+            else if (el.sh === 'tri') { ctx.beginPath(); ctx.moveTo(el.x + el.w / 2, el.y); ctx.lineTo(el.x + el.w, el.y + el.h); ctx.lineTo(el.x, el.y + el.h); ctx.closePath(); ctx.fill(); if (sw) ctx.stroke(); }
+            else if (el.sh === 'star') { const or = Math.min(el.w, el.h) / 2 - sw, ir = or * 0.4; ctx.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? ir : or, a = (Math.PI / 5) * i - Math.PI / 2; i === 0 ? ctx.moveTo(el.x + el.w / 2 + r * Math.cos(a), el.y + el.h / 2 + r * Math.sin(a)) : ctx.lineTo(el.x + el.w / 2 + r * Math.cos(a), el.y + el.h / 2 + r * Math.sin(a)); } ctx.closePath(); ctx.fill(); if (sw) ctx.stroke(); }
+            else if (el.sh === 'diamond') { ctx.beginPath(); ctx.moveTo(el.x + el.w / 2, el.y); ctx.lineTo(el.x + el.w, el.y + el.h / 2); ctx.lineTo(el.x + el.w / 2, el.y + el.h); ctx.lineTo(el.x, el.y + el.h / 2); ctx.closePath(); ctx.fill(); if (sw) ctx.stroke(); }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // ZIP BUILDER
+        // ═══════════════════════════════════════════════════════════
+        function crc32(data) { const t = new Uint32Array(256); for (let i = 0; i < 256; i++) { let n = i; for (let j = 0; j < 8; j++)n = n & 1 ? (0xEDB88320 ^ (n >>> 1)) : n >>> 1; t[i] = n; } let c = 0xFFFFFFFF; for (let i = 0; i < data.length; i++)c = t[(c ^ data[i]) & 0xFF] ^ (c >>> 8); return (c ^ 0xFFFFFFFF) >>> 0; }
+        const le2 = v => [v & 255, (v >> 8) & 255];
+        const le4 = v => [v & 255, (v >> 8) & 255, (v >> 16) & 255, (v >> 24) & 255];
+        function catU8(arrs) { const tot = arrs.reduce((s, a) => s + a.length, 0); const r = new Uint8Array(tot); let o = 0; arrs.forEach(a => { r.set(a, o); o += a.length; }); return r; }
+        function u8s(s) { return new TextEncoder().encode(s); }
+        function b64U8(url) { const raw = atob(url.split(',')[1]); const a = new Uint8Array(raw.length); for (let i = 0; i < raw.length; i++)a[i] = raw.charCodeAt(i); return a; }
+
+        class Zip {
+            constructor() { this.ents = []; }
+            add(name, data) { this.ents.push({ name, data: data instanceof Uint8Array ? data : new Uint8Array(data) }); }
+            build() {
+                const central = [], local = []; let off = 0;
+                for (const { name, data } of this.ents) {
+                    const nb = u8s(name), cr = crc32(data);
+                    const lh = new Uint8Array([0x50, 0x4B, 0x03, 0x04, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...le4(cr), ...le4(data.length), ...le4(data.length), ...le2(nb.length), 0, 0]);
+                    local.push(lh, nb, data);
+                    const cd = new Uint8Array([0x50, 0x4B, 0x01, 0x02, 20, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...le4(cr), ...le4(data.length), ...le4(data.length), ...le2(nb.length), 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, ...le4(off)]);
+                    central.push(cd, nb); off += lh.length + nb.length + data.length;
+                }
+                const cdb = catU8(central);
+                const eocd = new Uint8Array([0x50, 0x4B, 0x05, 0x06, 0, 0, 0, 0, ...le2(this.ents.length), ...le2(this.ents.length), ...le4(cdb.length), ...le4(off), 0, 0]);
+                return new Blob([catU8(local), cdb, eocd], { type: 'application/zip' });
+            }
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // PDF BUILDER (Pure JS, real PDF with JPEG images)
+        // ═══════════════════════════════════════════════════════════
+        async function buildPDF(pages, PW, PH) {
+            const enc = s => new TextEncoder().encode(s);
+            const parts = []; let pos = 0;
+            function w(data) { const u = typeof data === 'string' ? enc(data) : data; parts.push(u); pos += u.length; }
+
+            w('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+            const offs = {}; let oid = 1;
+
+            // Write image XObjects
+            const imgObjs = [];
+            for (const page of pages) {
+                for (const cell of page) {
+                    const id = oid++; offs[id] = pos;
+                    const u8 = b64U8(cell.url);
+                    w(`${id} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${Math.round(cell.pw)} /Height ${Math.round(cell.ph)} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${u8.length} >>\nstream\n`);
+                    w(u8); w('\nendstream\nendobj\n');
+                    imgObjs.push({ id, key: 'Im' + id, x: cell.x, y: cell.y, w: cell.w, h: cell.h, pageIdx: cell.pageIdx });
+                }
+            }
+
+            // Write page content + page objects
+            const pageIds = [], pageCount = pages.length;
+            let imgCursor = 0;
+            for (let pi = 0; pi < pageCount; pi++) {
+                const page = pages[pi]; const pageImgs = [];
+                while (imgCursor < imgObjs.length && imgObjs[imgCursor].pageIdx === pi) { pageImgs.push(imgObjs[imgCursor]); imgCursor++; }
+                let cs = '';
+                for (const img of pageImgs) {
+                    const pdfY = PH - img.y - img.h;
+                    cs += `q ${img.w.toFixed(3)} 0 0 ${img.h.toFixed(3)} ${img.x.toFixed(3)} ${pdfY.toFixed(3)} cm /${img.key} Do Q\n`;
+                }
+                const csBytes = enc(cs); const csId = oid++; offs[csId] = pos;
+                w(`${csId} 0 obj\n<< /Length ${csBytes.length} >>\nstream\n`); w(csBytes); w('\nendstream\nendobj\n');
+                const xobj = pageImgs.map(img => `/${img.key} ${img.id} 0 R`).join(' ');
+                const pgId = oid++; offs[pgId] = pos;
+                w(`${pgId} 0 obj\n<< /Type /Page /Parent 1 0 R /MediaBox [0 0 ${PW.toFixed(3)} ${PH.toFixed(3)}] /Contents ${csId} 0 R /Resources << /XObject << ${xobj} >> >> >>\nendobj\n`);
+                pageIds.push(pgId);
+            }
+
+            const pagesId = oid++; offs[pagesId] = pos;
+            w(`${pagesId} 0 obj\n<< /Type /Pages /Kids [${pageIds.map(i => i + ' 0 R').join(' ')}] /Count ${pageCount} >>\nendobj\n`);
+            const catId = oid++; offs[catId] = pos;
+            w(`${catId} 0 obj\n<< /Type /Catalog /Pages ${pagesId} 0 R >>\nendobj\n`);
+            const xrefPos = pos;
+            w(`xref\n0 ${oid}\n0000000000 65535 f \n`);
+            for (let i = 1; i < oid; i++)w(String(offs[i] || 0).padStart(10, '0') + ' 00000 n \n');
+            w(`trailer\n<< /Size ${oid} /Root ${catId} 0 R >>\nstartxref\n${xrefPos}\n%%EOF\n`);
+            return new Blob([catU8(parts)], { type: 'application/pdf' });
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // DOWNLOAD PDF & LAYOUT PREVIEW
+        // ═══════════════════════════════════════════════════════════
+        function updateLayoutPreview() {
+            const PS = { a4p: [595.28, 841.89], a4l: [841.89, 595.28], a3p: [841.89, 1190.55], a3l: [1190.55, 841.89], ltp: [612, 792], ltl: [792, 612] };
+            const pk = gv('dlpaper') || 'a4p'; const [PW, PH] = PS[pk] || PS.a4p;
+            const cols = Math.max(1, parseInt(gv('dlcols')) || 3);
+            const tpp = Math.max(1, parseInt(gv('dlpp')) || 9);
+            const gapMm = parseFloat(gv('dlgap')) || 4;
+            const gapPt = gapMm * 2.8346, margin = 28;
+
+            const tokWpt = (PW - margin * 2 - gapPt * (cols - 1)) / cols;
+            const tokHpt = tokWpt * (S.ch / S.cw);
+
+            const pg = document.getElementById('lp-page');
+            const targetH = 88; const scale = targetH / PH;
+            const targetW = PW * scale;
+
+            pg.style.width = targetW + 'px';
+            pg.style.height = targetH + 'px';
+            pg.innerHTML = '';
+
+            let col = 0, row = 0;
+            for (let i = 0; i < tpp; i++) {
+                const x = margin + col * (tokWpt + gapPt);
+                const y = margin + row * (tokHpt + gapPt);
+                if (y + tokHpt > PH) break; // Exceeds page safely
+
+                const d = document.createElement('div');
+                d.style.position = 'absolute';
+                d.style.background = 'rgba(66, 180, 245, 0.4)';
+                d.style.border = '1px solid rgba(66, 180, 245, 0.8)';
+                d.style.left = (x * scale) + 'px';
+                d.style.top = (y * scale) + 'px';
+                d.style.width = (tokWpt * scale) + 'px';
+                d.style.height = (tokHpt * scale) + 'px';
+                pg.appendChild(d);
+
+                col++; if (col >= cols) { col = 0; row++; }
+            }
+        }
+
+        async function dlPDF() {
+            if (!S.tokens.length) doGenerate();
+            if (!S.tokens.length) { notify('No tokens — click Generate first', 'err'); return; }
+            showProg(true); setProg(0, 'Starting…');
+
+            const PS = { a4p: [595.28, 841.89], a4l: [841.89, 595.28], a3p: [841.89, 1190.55], a3l: [1190.55, 841.89], ltp: [612, 792], ltl: [792, 612] };
+            const pk = gv('dlpaper') || 'a4p'; const [PW, PH] = PS[pk] || PS.a4p;
+            const cols = Math.max(1, parseInt(gv('dlcols')) || 3);
+            const tpp = Math.max(1, parseInt(gv('dlpp')) || 9);
+            const qm = parseInt(gv('dlqual')) || 2;
+            const gapMm = parseFloat(gv('dlgap')) || 4;
+            const gapPt = gapMm * 2.8346, margin = 28;
+            const incBack = gc('dlback');
+            const tokWpt = (PW - margin * 2 - gapPt * (cols - 1)) / cols;
+            const tokHpt = tokWpt * (S.ch / S.cw);
+            const xc = document.getElementById('xc');
+            const pages = []; let cur = [], col = 0, row = 0, pi = 0;
+
+            function flush() { if (cur.length) { pages.push(cur); cur = []; col = 0; row = 0; pi++; } }
+
+            // Render front images
+            for (let i = 0; i < S.tokens.length; i++) {
+                if (i % 5 === 0) { setProg(Math.round(i / S.tokens.length * 78), `Rendering ${i + 1}/${S.tokens.length}…`); await new Promise(r => setTimeout(r, 0)); }
+                if (cur.length >= tpp) flush();
+                const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
+                await drawTok(xc, S.tokens[i].code, 'front', qm);
+                cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: pi });
+                col++; if (col >= cols) { col = 0; row++; }
+            }
+            flush();
+
+            if (incBack) {
+                col = 0; row = 0; cur = [];
+                for (let i = 0; i < S.tokens.length; i++) {
+                    if (i % 5 === 0) { setProg(78 + Math.round(i / S.tokens.length * 10), `Rendering back ${i + 1}…`); await new Promise(r => setTimeout(r, 0)); }
+                    if (cur.length >= tpp) flush();
+                    const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
+                    await drawTok(xc, S.tokens[i].code, 'back', qm);
+                    cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: pi });
+                    col++; if (col >= cols) { col = 0; row++; }
+                }
+                flush();
+            }
+
+            setProg(90, 'Building PDF…'); await new Promise(r => setTimeout(r, 0));
+            const blob = await buildPDF(pages, PW, PH);
+            setProg(100, 'Saving…');
+            dlBlob(blob, 'TokenForgePro.pdf');
+            showProg(false); notify('✓ PDF downloaded!', 'ok');
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // DOWNLOAD PNG ZIP
+        // ═══════════════════════════════════════════════════════════
+        async function dlPNG() {
+            if (!S.tokens.length) doGenerate();
+            if (!S.tokens.length) return;
+            showProg(true);
+            const qm = parseInt(gv('dlqual')) || 2;
+            const lim = Math.min(S.tokens.length, 500);
+            const zip = new Zip(); const xc = document.getElementById('xc'); const incBack = gc('dlback');
+            for (let i = 0; i < lim; i++) {
+                if (i % 5 === 0) { setProg(Math.round(i / lim * 100), `Image ${i + 1}/${lim}…`); await new Promise(r => setTimeout(r, 0)); }
+                const tok = S.tokens[i];
+                await drawTok(xc, tok.code, 'front', qm);
+                zip.add(`front/${String(tok.serial).padStart(6, '0')}_${tok.code}.png`, b64U8(xc.toDataURL('image/png')));
+                if (incBack) { await drawTok(xc, tok.code, 'back', qm); zip.add(`back/${String(tok.serial).padStart(6, '0')}_${tok.code}.png`, b64U8(xc.toDataURL('image/png'))); }
+            }
+            dlBlob(zip.build(), 'TokenForgePro_Images.zip');
+            showProg(false); notify(`✓ ${lim} images exported!`, 'ok');
+        }
+
+        // ═══════════════════════════════════════════════════════════
+        // DATA DOWNLOADS
+        // ═══════════════════════════════════════════════════════════
+        function dlBlob(blob, name) { const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name; document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); document.body.removeChild(a); }, 600); }
+        function dlText(t, n, m) { dlBlob(new Blob([t], { type: m }), n); }
+        function dlCSV() { if (!S.tokens.length) doGenerate(); let c = 'Serial,Token Code,QR Value\r\n'; S.tokens.forEach(t => c += `${t.serial},"${t.code}","${getQRVal(t.code)}"\r\n`); dlText(c, 'tokens.csv', 'text/csv'); notify('CSV downloaded', 'ok'); }
+        function dlXLS() { if (!S.tokens.length) doGenerate(); let c = 'Serial\tToken Code\tQR Value\r\n'; S.tokens.forEach(t => c += `${t.serial}\t${t.code}\t${getQRVal(t.code)}\r\n`); dlText(c, 'tokens.xls', 'application/vnd.ms-excel'); notify('Excel downloaded', 'ok'); }
+        function dlJSON() { if (!S.tokens.length) doGenerate(); dlText(JSON.stringify({ date: new Date().toISOString(), count: S.tokens.length, tokens: S.tokens.map(t => ({ ...t, qr: getQRVal(t.code) })) }, null, 2), 'tokens.json', 'application/json'); notify('JSON downloaded', 'ok'); }
+        function dlTXT() { if (!S.tokens.length) doGenerate(); dlText(S.tokens.map(t => t.code).join('\n'), 'tokens.txt', 'text/plain'); notify('TXT downloaded', 'ok'); }
+        function dlScanner() { if (!S.tokens.length) doGenerate(); let c = 'Token Code\tSerial\tQR Value\tScanned Data (click here & scan)\r\n'; S.tokens.forEach(t => c += `${t.code}\t${t.serial}\t${getQRVal(t.code)}\t\r\n`); dlText(c, 'Scanner_Ready.xls', 'application/vnd.ms-excel'); notify('Scanner Excel downloaded! Open → click last column → scan barcode!', 'ok'); }
+
+        // ═══════════════════════════════════════════════════════════
+        // INIT
+        // ═══════════════════════════════════════════════════════════
+        (function init() {
+            addSeg('numbers', 3);
+            refreshFmt();
+            setTimeout(() => {
+                addTokNum(true);
+                // Add a sample label
+                addText('ENTRY TOKEN', Math.round(S.cw / 2) - 75, 10, { w: 150, h: 24, fs: 11, ff: 'Arial', fw: 'bold', fc: '#888888', fa: 'center' });
+                zfit();
+                S.sel = null; render(); updateProps();
+                updateLayoutPreview();
+            }, 50);
+        })();
+    </script>
+</body>
+
+</html>
