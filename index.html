@@ -8,7 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;0,700;1,400&family=Open+Sans:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;0,700;1,400&family=Open+Sans:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -214,24 +216,79 @@
         }
 
         .as-grid {
-            display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px;
-            max-height: 180px; overflow-y: auto; overflow-x: hidden;
-            background: var(--bg); border: 1px solid var(--bd); border-radius: 5px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 4px;
+            padding: 4px;
+            max-height: 180px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--bg);
+            border: 1px solid var(--bd);
+            border-radius: 5px;
         }
+
         .as-btn {
-            background: var(--p1); border: 1px solid transparent; border-radius: 4px;
-            color: var(--tx); font-size: 11px; padding: 6px 2px;
-            cursor: pointer; text-align: center;
-            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            background: var(--p1);
+            border: 1px solid transparent;
+            border-radius: 4px;
+            color: var(--tx);
+            font-size: 11px;
+            padding: 6px 2px;
+            cursor: pointer;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
             transition: all 0.15s ease;
         }
-        .as-btn svg { width: 20px; height: 20px; fill: var(--tx); stroke: var(--tx); transition: transform 0.15s ease; }
-        .as-btn:hover { background: var(--p2); border-color: var(--ac); }
-        .as-btn:hover svg { transform: scale(1.1); fill: var(--ac); stroke: var(--ac); }
-        .as-btn.n-str svg { stroke: none; }
-        .as-btn.n-fil svg { fill: none; stroke-width: 2px; stroke-linecap: round; stroke-linejoin: round; }
-        .as-lbl { font-size: 8px; opacity: 0.8; }
-        .as-cat { grid-column: 1 / -1; font-size: 9px; font-weight: bold; color: var(--a2); text-transform: uppercase; margin-top: 4px; border-bottom: 1px solid var(--bd2); padding-bottom: 2px; }
+
+        .as-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--tx);
+            stroke: var(--tx);
+            transition: transform 0.15s ease;
+        }
+
+        .as-btn:hover {
+            background: var(--p2);
+            border-color: var(--ac);
+        }
+
+        .as-btn:hover svg {
+            transform: scale(1.1);
+            fill: var(--ac);
+            stroke: var(--ac);
+        }
+
+        .as-btn.n-str svg {
+            stroke: none;
+        }
+
+        .as-btn.n-fil svg {
+            fill: none;
+            stroke-width: 2px;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .as-lbl {
+            font-size: 8px;
+            opacity: 0.8;
+        }
+
+        .as-cat {
+            grid-column: 1 / -1;
+            font-size: 9px;
+            font-weight: bold;
+            color: var(--a2);
+            text-transform: uppercase;
+            margin-top: 4px;
+            border-bottom: 1px solid var(--bd2);
+            padding-bottom: 2px;
+        }
 
         .sec {
             border-bottom: 1px solid var(--bd);
@@ -859,12 +916,25 @@
             z-index: 9000;
             pointer-events: none;
         }
-        .g-line.v { width: 1px; height: 200%; top: -50%; }
-        .g-line.h { height: 1px; width: 200%; left: -50%; }
+
+        .g-line.v {
+            width: 1px;
+            height: 200%;
+            top: -50%;
+        }
+
+        .g-line.h {
+            height: 1px;
+            width: 200%;
+            left: -50%;
+        }
 
         /* Responsive Layout for Mobile */
         @media (max-width: 900px) {
-            body { overflow: auto; }
+            body {
+                overflow: auto;
+            }
+
             #app {
                 display: flex;
                 flex-direction: column;
@@ -872,31 +942,65 @@
                 min-height: 100vh;
                 padding-bottom: 40px;
             }
+
             #hdr {
-                position: sticky; top: 0;
-                flex-wrap: wrap; height: auto; padding: 10px; justify-content: center;
+                position: sticky;
+                top: 0;
+                flex-wrap: wrap;
+                height: auto;
+                padding: 10px;
+                justify-content: center;
                 gap: 8px;
             }
-            #hdr .logo { width: 100%; text-align: center; margin-bottom: 2px; }
-            #hdr .hsp { display: none; }
-            #sbl, #sbr {
-                border-right: none; border-left: none;
+
+            #hdr .logo {
+                width: 100%;
+                text-align: center;
+                margin-bottom: 2px;
+            }
+
+            #hdr .hsp {
+                display: none;
+            }
+
+            #sbl,
+            #sbr {
+                border-right: none;
+                border-left: none;
                 border-top: 1px solid var(--bd);
                 overflow-y: visible;
             }
+
             #carea {
-                height: 45vh; min-height: 300px; flex-shrink: 0;
-                position: sticky; top: 76px; z-index: 50;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.7);
+                height: 45vh;
+                min-height: 300px;
+                flex-shrink: 0;
+                position: sticky;
+                top: 76px;
+                z-index: 50;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.7);
             }
+
             #stb {
-                position: fixed; bottom: 0; left: 0; right: 0;
-                flex-wrap: wrap; height: auto; padding: 6px 14px;
-                border-top: 1px solid var(--bd); justify-content: center;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                flex-wrap: wrap;
+                height: auto;
+                padding: 6px 14px;
+                border-top: 1px solid var(--bd);
+                justify-content: center;
                 gap: 8px;
             }
-            #cwrap { padding: 15px; }
-            .dlg { grid-template-columns: 1fr; }
+
+            #cwrap {
+                padding: 15px;
+            }
+
+            .dlg {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -940,7 +1044,7 @@
                     <div class="f"><label>Start Number</label><input type="number" id="tstart" value="1" min="0"
                             oninput="refreshFmt()"></div>
                     <div class="f"><label>Total Count</label><input type="number" id="tcount" value="20" min="1"
-                            max="10000"></div>
+                            max="10000" oninput="syncTotalToDl()"></div>
                 </div>
                 <div class="tip warn">
                     <b>Examples:</b><br>
@@ -1096,8 +1200,8 @@
                 </div>
                 <div class="f" id="qurlrow" style="display:none"><label>URL Link</label><input type="text" id="qurl"
                         placeholder="https://site.com/" oninput="render()"></div>
-                <div class="f" id="qcstrow" style="display:none"><label>Custom Text</label><input type="text"
-                        id="qcst" placeholder="Enter text..." oninput="render()"></div>
+                <div class="f" id="qcstrow" style="display:none"><label>Custom Text</label><input type="text" id="qcst"
+                        placeholder="Enter text..." oninput="render()"></div>
                 <div class="r2">
                     <div class="f"><label>QR Color</label><input type="color" id="qrfg" value="#000000"
                             oninput="render()"></div>
@@ -1164,10 +1268,26 @@
                     <div id="lp-page" style="background:#fff;position:relative;box-shadow:0 0 5px rgba(0,0,0,0.5)">
                     </div>
                 </div>
-                <div class="f"><label class="ck"><input type="checkbox" id="dlback"> Include Back Side in PDF</label>
+                <!-- LIVE PAGE CALCULATOR -->
+                <div style="background:var(--p2);border:1px solid var(--bd);border-radius:5px;padding:8px 10px;margin-bottom:8px">
+                    <div style="font-size:9px;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">📊 Page Calculator</div>
+                    <div class="r3">
+                        <div class="f"><label>Total Tokens</label><input type="number" id="dltotal" value="20" min="1" max="10000" oninput="updateLayoutPreview()"></div>
+                        <div class="f"><label>Front Pages</label><input type="text" id="pgfront" value="—" disabled style="text-align:center;font-weight:bold;color:var(--ac)"></div>
+                        <div class="f"><label>Back Pages</label><input type="text" id="pgback" value="—" disabled style="text-align:center;font-weight:bold;color:var(--a2)"></div>
+                    </div>
+                    <div id="pginfo" style="font-size:10px;color:var(--a4);margin-top:4px">Set total tokens & per-page to see page estimate</div>
+                </div>
+                <!-- BACK SIDE OPTIONS -->
+                <div style="background:var(--p2);border:1px solid var(--bd);border-radius:5px;padding:8px 10px;margin-bottom:8px">
+                    <div style="font-size:9px;font-weight:700;color:var(--mt);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px">🔄 Back Side Options</div>
+                    <div class="f" style="margin-bottom:4px"><label class="ck"><input type="checkbox" id="dlback" onchange="updateLayoutPreview()"> Include Back Side in combined PDF</label></div>
+                    <div class="f" style="margin-bottom:4px"><label class="ck"><input type="checkbox" id="dlbacksame" onchange="updateLayoutPreview()"> ☑ Same back design for ALL tokens</label></div>
+                    <div class="tip" style="margin-bottom:0">If same back for all, the "Back PDF" will be a single page → print it on the reverse of every front-side page.</div>
                 </div>
                 <div class="dlg" style="margin-bottom:5px">
-                    <button class="btn btn-b btn-sm" onclick="dlPDF()">📋 PDF Sheet</button>
+                    <button class="btn btn-b btn-sm" onclick="dlPDF()">📋 Front PDF</button>
+                    <button class="btn btn-p btn-sm" onclick="dlBackPDF()" id="btn-backpdf" title="Download back-side tokens as a separate PDF with identical alignment">🔄 Back PDF</button>
                     <button class="btn btn-g btn-sm" onclick="dlPNG()">🖼️ PNG ZIP</button>
                     <button class="btn btn-g btn-sm" onclick="dlCSV()">📄 CSV</button>
                     <button class="btn btn-g btn-sm" onclick="dlXLS()">📊 Excel</button>
@@ -1267,11 +1387,11 @@
         ];
 
         function initLibs() {
-            const grid = document.getElementById('as-grid'); if(!grid) return;
-            let h='', lastC='';
+            const grid = document.getElementById('as-grid'); if (!grid) return;
+            let h = '', lastC = '';
             ASSETS.forEach(a => {
-                if(a.c !== lastC) { h+= `<div class="as-cat">${a.c}</div>`; lastC=a.c; }
-                const act = a.id === 'phone' || a.id === 'pin' || a.id === 'heart' ? ` fill="${a.f==='n-fil'?'none':'currentColor'}"` : '';
+                if (a.c !== lastC) { h += `<div class="as-cat">${a.c}</div>`; lastC = a.c; }
+                const act = a.id === 'phone' || a.id === 'pin' || a.id === 'heart' ? ` fill="${a.f === 'n-fil' ? 'none' : 'currentColor'}"` : '';
                 h += `<button class="as-btn ${a.f}" onclick="addShape('${a.id}')" title="Add ${a.n}"><svg viewBox="0 0 22 22"${act}>${a.svg}</svg><span class="as-lbl">${a.n}</span></button>`;
             });
             grid.innerHTML = h;
@@ -1551,7 +1671,7 @@
             const div = document.createElement('div');
             div.className = 'tel' + (el.id === S.sel ? ' sel' : '');
             div.dataset.id = el.id;
-            let fsh = el.shb || el.shx || el.shy ? `drop-shadow(${el.shx||0}px ${el.shy||0}px ${el.shb||0}px ${hexRgba(el.shc||'#000000', 0.6)})` : '';
+            let fsh = el.shb || el.shx || el.shy ? `drop-shadow(${el.shx || 0}px ${el.shy || 0}px ${el.shb || 0}px ${hexRgba(el.shc || '#000000', 0.6)})` : '';
             div.style.cssText = `left:${el.x * z}px;top:${el.y * z}px;width:${el.w * z}px;height:${el.h * z}px;` +
                 `transform:rotate(${el.rot || 0}deg);opacity:${(el.op ?? 100) / 100};position:absolute;` +
                 (fsh ? `filter:${fsh};` : '');
@@ -1604,7 +1724,7 @@
                 const roh = document.createElement('div'); roh.className = 'roh'; div.appendChild(roh);
             }
             div.addEventListener('mousedown', ev => startDrag(ev, el.id));
-            div.addEventListener('touchstart', ev => startDrag(ev, el.id), {passive: false});
+            div.addEventListener('touchstart', ev => startDrag(ev, el.id), { passive: false });
             div.addEventListener('contextmenu', ev => { ev.preventDefault(); ev.stopPropagation(); showCtx(ev); selEl(el.id); });
             return div;
         }
@@ -1617,7 +1737,7 @@
             const ast = ASSETS.find(a => a.id === el.sh);
             if (ast) {
                 let ms = ast.svg;
-                if((el.sh === 'rect' || el.sh === 'pill') && el.rx !== undefined) ms = ms.replace(/rx="[0-9.]+"/, `rx="${(el.rx||0)/4}"`);
+                if ((el.sh === 'rect' || el.sh === 'pill') && el.rx !== undefined) ms = ms.replace(/rx="[0-9.]+"/, `rx="${(el.rx || 0) / 4}"`);
                 svg.setAttribute('viewBox', '0 0 22 22');
                 svg.setAttribute('preserveAspectRatio', 'none');
                 svg.innerHTML = ms;
@@ -1635,13 +1755,13 @@
                         }
                         if (ast.id === 'line') {
                             n.setAttribute('stroke', el.fc2 || '#000');
-                            n.setAttribute('stroke-width', el.h*scale || ssw);
+                            n.setAttribute('stroke-width', el.h * scale || ssw);
                         }
                     } else {
                         if (ast.f === 'n-fil') {
                             n.setAttribute('fill', 'none');
                             n.setAttribute('stroke', el.fc2 || '#000');
-                            n.setAttribute('stroke-width', sw > 0 ? ssw : 2*scale);
+                            n.setAttribute('stroke-width', sw > 0 ? ssw : 2 * scale);
                         } else {
                             if (natFill !== 'none' && natFill !== 'currentColor') n.setAttribute('fill', el.fc2 || '#000');
                             if (natFill === 'currentColor') n.setAttribute('fill', el.fc2 || '#000');
@@ -1661,39 +1781,39 @@
         // ═══════════════════════════════════════════════════════════
         // DRAG / RESIZE / ROTATE
         // ═══════════════════════════════════════════════════════════
-        function getEvP(e){ return e.touches && e.touches.length > 0 ? e.touches[0] : e; }
+        function getEvP(e) { return e.touches && e.touches.length > 0 ? e.touches[0] : e; }
         function startDrag(ev, id) {
-            if (ev.button !== undefined && ev.button !== 0) return; if(ev.cancelable !== false) ev.preventDefault(); ev.stopPropagation();
+            if (ev.button !== undefined && ev.button !== 0) return; if (ev.cancelable !== false) ev.preventDefault(); ev.stopPropagation();
             selEl(id); const el = gEl(id); if (!el || el.lck) return; const t = ev.target;
             const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY;
             if (t.classList.contains('rh')) {
                 S.rsz = { id, sx: cx, sy: cy, ow: el.w, oh: el.h };
-                document.addEventListener('mousemove', doRsz); document.addEventListener('touchmove', doRsz, {passive: false});
+                document.addEventListener('mousemove', doRsz); document.addEventListener('touchmove', doRsz, { passive: false });
                 document.addEventListener('mouseup', stopRsz); document.addEventListener('touchend', stopRsz);
             } else if (t.classList.contains('roh')) {
                 const d = document.querySelector(`[data-id="${id}"]`); const rc = d.getBoundingClientRect();
                 S.rot = { id, cx: rc.left + rc.width / 2, cy: rc.top + rc.height / 2 };
-                document.addEventListener('mousemove', doRot); document.addEventListener('touchmove', doRot, {passive: false});
+                document.addEventListener('mousemove', doRot); document.addEventListener('touchmove', doRot, { passive: false });
                 document.addEventListener('mouseup', stopRot); document.addEventListener('touchend', stopRot);
             } else {
                 S.drag = { id, sx: cx, sy: cy, ox: el.x, oy: el.y };
-                document.addEventListener('mousemove', doDrag); document.addEventListener('touchmove', doDrag, {passive: false});
+                document.addEventListener('mousemove', doDrag); document.addEventListener('touchmove', doDrag, { passive: false });
                 document.addEventListener('mouseup', stopDrag); document.addEventListener('touchend', stopDrag);
             }
         }
         function doDrag(ev) {
-            if (!S.drag) return; if(ev.cancelable !== false) ev.preventDefault();
+            if (!S.drag) return; if (ev.cancelable !== false) ev.preventDefault();
             const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.drag.id); if (!el) return;
             let nx = S.drag.ox + (cx - S.drag.sx) / S.zoom;
             let ny = S.drag.oy + (cy - S.drag.sy) / S.zoom;
-            
+
             const gds = document.getElementById('gds_' + S.side); if (gds) gds.innerHTML = '';
             const snap = 5, cx1 = nx + el.w / 2, cy1 = ny + el.h / 2;
             let sx = null, sy = null;
-            
+
             if (Math.abs(cx1 - S.cw / 2) < snap) sx = S.cw / 2;
             if (Math.abs(cy1 - S.ch / 2) < snap) sy = S.ch / 2;
-            
+
             S.els[S.side].filter(e => e.id !== el.id && e.vis && !e.lck).forEach(e => {
                 const cx2 = e.x + e.w / 2, cy2 = e.y + e.h / 2;
                 if (Math.abs(cx1 - cx2) < snap) sx = cx2;
@@ -1704,10 +1824,10 @@
                 if (Math.abs(cx1 - cx2) < snap) sx = cx2;
                 if (Math.abs(cy1 - cy2) < snap) sy = cy2;
             });
-            
+
             if (sx !== null) { nx = sx - el.w / 2; if (gds) gds.innerHTML += `<div class="g-line v" style="left:${sx * S.zoom}px"></div>`; }
             if (sy !== null) { ny = sy - el.h / 2; if (gds) gds.innerHTML += `<div class="g-line h" style="top:${sy * S.zoom}px"></div>`; }
-            
+
             el.x = nx; el.y = ny;
             const d = document.querySelector(`[data-id="${S.drag.id}"]`);
             if (d) { d.style.left = el.x * S.zoom + 'px'; d.style.top = el.y * S.zoom + 'px'; }
@@ -1716,9 +1836,9 @@
             if (S.drag) { const gds = document.getElementById('gds_' + S.side); if (gds) gds.innerHTML = ''; saveU(); updateProps(); }
             S.drag = null; document.removeEventListener('mousemove', doDrag); document.removeEventListener('touchmove', doDrag); document.removeEventListener('mouseup', stopDrag); document.removeEventListener('touchend', stopDrag);
         }
-        function doRsz(ev) { if (!S.rsz) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rsz.id); if (!el) return; el.w = Math.max(10, S.rsz.ow + (cx - S.rsz.sx) / S.zoom); el.h = Math.max(10, S.rsz.oh + (cy - S.rsz.sy) / S.zoom); render(); updateProps(); }
+        function doRsz(ev) { if (!S.rsz) return; if (ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rsz.id); if (!el) return; el.w = Math.max(10, S.rsz.ow + (cx - S.rsz.sx) / S.zoom); el.h = Math.max(10, S.rsz.oh + (cy - S.rsz.sy) / S.zoom); render(); updateProps(); }
         function stopRsz() { if (S.rsz) saveU(); S.rsz = null; document.removeEventListener('mousemove', doRsz); document.removeEventListener('touchmove', doRsz); document.removeEventListener('mouseup', stopRsz); document.removeEventListener('touchend', stopRsz); }
-        function doRot(ev) { if (!S.rot) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rot.id); if (!el) return; el.rot = Math.round(Math.atan2(cy - S.rot.cy, cx - S.rot.cx) * 180 / Math.PI + 90); const d = document.querySelector(`[data-id="${S.rot.id}"]`); if (d) d.style.transform = `rotate(${el.rot}deg)`; }
+        function doRot(ev) { if (!S.rot) return; if (ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rot.id); if (!el) return; el.rot = Math.round(Math.atan2(cy - S.rot.cy, cx - S.rot.cx) * 180 / Math.PI + 90); const d = document.querySelector(`[data-id="${S.rot.id}"]`); if (d) d.style.transform = `rotate(${el.rot}deg)`; }
         function stopRot() { if (S.rot) { saveU(); updateProps(); } S.rot = null; document.removeEventListener('mousemove', doRot); document.removeEventListener('touchmove', doRot); document.removeEventListener('mouseup', stopRot); document.removeEventListener('touchend', stopRot); }
 
         function wclick(ev) { if (ev.target.id === 'cwrap' || ev.target.classList.contains('tcard')) { S.sel = null; render(); updateProps(); } hideCtx(); }
@@ -1729,8 +1849,8 @@
         const SWATCHES = ['#ffffff', '#000000', '#eb3b5a', '#fa8231', '#f7b731', '#20bf6b', '#0fb9b1', '#2d98da', '#3867d6', '#8854d0', '#a5b1c2', '#4b6584'];
         function mkSwt(k, cur) {
             return `<div style="display:flex;gap:3px;margin-top:4px;flex-wrap:wrap">` +
-                SWATCHES.map(c => `<div style="width:16px;height:16px;border-radius:3px;border:1px solid rgba(0,0,0,0.2);background:${c};cursor:pointer${cur===c?';box-shadow:0 0 0 2px var(--ac)':''}" onclick="sp('${k}','${c}')"></div>`).join('') +
-            `</div>`;
+                SWATCHES.map(c => `<div style="width:16px;height:16px;border-radius:3px;border:1px solid rgba(0,0,0,0.2);background:${c};cursor:pointer${cur === c ? ';box-shadow:0 0 0 2px var(--ac)' : ''}" onclick="sp('${k}','${c}')"></div>`).join('') +
+                `</div>`;
         }
 
         function selEl(id) { S.sel = id; render(); updateProps(); const el = gEl(id); document.getElementById('stsel').textContent = el ? '▶ ' + el.et.toUpperCase() + ' selected' : ''; }
@@ -1741,33 +1861,33 @@
             if (!el) { pp.innerHTML = '<div class="pnone">Click any element on the canvas</div>'; return; }
             let h = `<div class="psec"><div class="phd">📐 Position & Size</div>
     <div class="r2">
-      <div class="f"><label>X</label><input type="number" value="${Math.round(el.x)}" onchange="sp('x',+this.value)" ${el.lck?'disabled':''}></div>
-      <div class="f"><label>Y</label><input type="number" value="${Math.round(el.y)}" onchange="sp('y',+this.value)" ${el.lck?'disabled':''}></div>
+      <div class="f"><label>X</label><input type="number" value="${Math.round(el.x)}" onchange="sp('x',+this.value)" ${el.lck ? 'disabled' : ''}></div>
+      <div class="f"><label>Y</label><input type="number" value="${Math.round(el.y)}" onchange="sp('y',+this.value)" ${el.lck ? 'disabled' : ''}></div>
     </div>
     <div class="r2">
-      <div class="f"><label>Width</label><input type="number" value="${Math.round(el.w)}" min="2" onchange="sp('w',+this.value)" ${el.lck?'disabled':''}></div>
-      <div class="f"><label>Height</label><input type="number" value="${Math.round(el.h)}" min="2" onchange="sp('h',+this.value)" ${el.lck?'disabled':''}></div>
+      <div class="f"><label>Width</label><input type="number" value="${Math.round(el.w)}" min="2" onchange="sp('w',+this.value)" ${el.lck ? 'disabled' : ''}></div>
+      <div class="f"><label>Height</label><input type="number" value="${Math.round(el.h)}" min="2" onchange="sp('h',+this.value)" ${el.lck ? 'disabled' : ''}></div>
     </div>
     <div class="r2">
-      <div class="f"><label>Rotate °</label><input type="number" value="${el.rot || 0}" onchange="sp('rot',+this.value)" ${el.lck?'disabled':''}></div>
+      <div class="f"><label>Rotate °</label><input type="number" value="${el.rot || 0}" onchange="sp('rot',+this.value)" ${el.lck ? 'disabled' : ''}></div>
       <div class="f"><label>Opacity %</label><input type="number" value="${el.op ?? 100}" min="0" max="100" onchange="sp('op',+this.value)"></div>
     </div>
     <div class="sepd"></div>
     <div class="phd" style="margin-top:8px">🌑 Drop Shadow</div>
     <div class="f" style="margin-bottom:4px">
       <div style="display:flex;gap:4px">
-        <div style="width:33%"><label>Offset X</label><input type="number" value="${el.shx||0}" onchange="sp('shx',+this.value)"></div>
-        <div style="width:33%"><label>Offset Y</label><input type="number" value="${el.shy||0}" onchange="sp('shy',+this.value)"></div>
-        <div style="width:33%"><label>Blur</label><input type="number" value="${el.shb||0}" min="0" onchange="sp('shb',+this.value)"></div>
+        <div style="width:33%"><label>Offset X</label><input type="number" value="${el.shx || 0}" onchange="sp('shx',+this.value)"></div>
+        <div style="width:33%"><label>Offset Y</label><input type="number" value="${el.shy || 0}" onchange="sp('shy',+this.value)"></div>
+        <div style="width:33%"><label>Blur</label><input type="number" value="${el.shb || 0}" min="0" onchange="sp('shb',+this.value)"></div>
       </div>
       <div style="margin-top:4px"><label>Shadow Color</label>
         <div style="display:flex;gap:4px">
-            <input type="color" value="${el.shc||'#000000'}" oninput="sp('shc',this.value)" style="width:40px;height:24px;padding:0">
-            <div style="flex:1">${mkSwt('shc', el.shc||'#000000')}</div>
+            <input type="color" value="${el.shc || '#000000'}" oninput="sp('shc',this.value)" style="width:40px;height:24px;padding:0">
+            <div style="flex:1">${mkSwt('shc', el.shc || '#000000')}</div>
         </div>
       </div>
     </div>
-    <div class="f" style="margin-top:10px"><label class="ck"><input type="checkbox" ${el.lck?'checked':''} onchange="sp('lck',this.checked)"> 🔒 Lock Position / Size</label></div>
+    <div class="f" style="margin-top:10px"><label class="ck"><input type="checkbox" ${el.lck ? 'checked' : ''} onchange="sp('lck',this.checked)"> 🔒 Lock Position / Size</label></div>
     </div>`;
 
             if (el.et === 'text' || el.et === 'tn') {
@@ -1803,7 +1923,7 @@
         <div class="f"><label>Stroke</label><input type="color" value="${el.sc}" oninput="sp('sc',this.value)">${mkSwt('sc', el.sc)}</div>
       </div>
       <div class="f"><label>Stroke Width</label><input type="number" value="${el.sw || 0}" min="0" max="30" onchange="sp('sw',+this.value)"></div>
-      ${el.sh==='rect'||el.sh==='pill'?`<div class="f"><label>Corner Radius</label><input type="number" value="${el.rx || 0}" min="0" max="100" onchange="sp('rx',+this.value)"></div>`:''}
+      ${el.sh === 'rect' || el.sh === 'pill' ? `<div class="f"><label>Corner Radius</label><input type="number" value="${el.rx || 0}" min="0" max="100" onchange="sp('rx',+this.value)"></div>` : ''}
       </div>`;
             }
             if (el.et === 'img' || el.et === 'bg') {
@@ -1878,23 +1998,23 @@
                 const obj = ctx.getImageData(0, 0, w, h); const d = obj.data;
                 const br = d[0], bg = d[1], bb = d[2];
                 const tol = 40;
-                const match = (i) => Math.abs(d[i]-br)<=tol && Math.abs(d[i+1]-bg)<=tol && Math.abs(d[i+2]-bb)<=tol && d[i+3]>0;
-                const vis = new Uint8Array(w*h);
+                const match = (i) => Math.abs(d[i] - br) <= tol && Math.abs(d[i + 1] - bg) <= tol && Math.abs(d[i + 2] - bb) <= tol && d[i + 3] > 0;
+                const vis = new Uint8Array(w * h);
                 const Q = [];
-                const addQ = (px, py) => { let p = py*w+px; if(!vis[p]){vis[p]=1; Q.push(p);} };
-                addQ(0,0); addQ(w-1,0); addQ(0,h-1); addQ(w-1,h-1);
+                const addQ = (px, py) => { let p = py * w + px; if (!vis[p]) { vis[p] = 1; Q.push(p); } };
+                addQ(0, 0); addQ(w - 1, 0); addQ(0, h - 1); addQ(w - 1, h - 1);
                 let head = 0;
-                while(head < Q.length) {
-                    const p = Q[head++]; 
-                    const x = p%w, y = Math.floor(p/w), i = p*4;
+                while (head < Q.length) {
+                    const p = Q[head++];
+                    const x = p % w, y = Math.floor(p / w), i = p * 4;
                     if (match(i)) {
-                        d[i+3] = 0;
-                        if(x>0) addQ(x-1,y);
-                        if(x<w-1) addQ(x+1,y);
-                        if(y>0) addQ(x,y-1);
-                        if(y<h-1) addQ(x,y+1);
-                    } else if (d[i+3]>0 && d[i+3]>200) {
-                        d[i+3] -= 100; // Edge smoothing
+                        d[i + 3] = 0;
+                        if (x > 0) addQ(x - 1, y);
+                        if (x < w - 1) addQ(x + 1, y);
+                        if (y > 0) addQ(x, y - 1);
+                        if (y < h - 1) addQ(x, y + 1);
+                    } else if (d[i + 3] > 0 && d[i + 3] > 200) {
+                        d[i + 3] -= 100; // Edge smoothing
                     }
                 }
                 ctx.putImageData(obj, 0, 0); el.src = cv.toDataURL('image/png');
@@ -1912,14 +2032,14 @@
                 const obj = ctx.getImageData(0, 0, cv.width, cv.height); const d = obj.data;
                 const factor = (259 * (30 + 255)) / (255 * (259 - 30)); // Contrast boost
                 for (let i = 0; i < d.length; i += 4) {
-                    if(d[i+3]===0) continue;
-                    d[i]   = Math.min(255, Math.max(0, factor * (d[i] - 128) + 128));
-                    d[i+1] = Math.min(255, Math.max(0, factor * (d[i+1] - 128) + 128));
-                    d[i+2] = Math.min(255, Math.max(0, factor * (d[i+2] - 128) + 128));
-                    if (i > cv.width*4 && i < d.length - cv.width*4) {
-                        d[i] = Math.min(255, d[i] + (d[i] - d[i-4])*0.15); // subtle sharpen
-                        d[i+1] = Math.min(255, d[i+1] + (d[i+1] - d[i-3])*0.15);
-                        d[i+2] = Math.min(255, d[i+2] + (d[i+2] - d[i-2])*0.15);
+                    if (d[i + 3] === 0) continue;
+                    d[i] = Math.min(255, Math.max(0, factor * (d[i] - 128) + 128));
+                    d[i + 1] = Math.min(255, Math.max(0, factor * (d[i + 1] - 128) + 128));
+                    d[i + 2] = Math.min(255, Math.max(0, factor * (d[i + 2] - 128) + 128));
+                    if (i > cv.width * 4 && i < d.length - cv.width * 4) {
+                        d[i] = Math.min(255, d[i] + (d[i] - d[i - 4]) * 0.15); // subtle sharpen
+                        d[i + 1] = Math.min(255, d[i + 1] + (d[i + 1] - d[i - 3]) * 0.15);
+                        d[i + 2] = Math.min(255, d[i + 2] + (d[i + 2] - d[i - 2]) * 0.15);
                     }
                 }
                 ctx.putImageData(obj, 0, 0); el.src = cv.toDataURL('image/png');
@@ -2167,6 +2287,12 @@
         // ═══════════════════════════════════════════════════════════
         // DOWNLOAD PDF & LAYOUT PREVIEW
         // ═══════════════════════════════════════════════════════════
+        function syncTotalToDl() {
+            const tc = parseInt(gv('tcount')) || 20;
+            sv('dltotal', tc);
+            updateLayoutPreview();
+        }
+
         function updateLayoutPreview() {
             const PS = { a4p: [595.28, 841.89], a4l: [841.89, 595.28], a3p: [841.89, 1190.55], a3l: [1190.55, 841.89], ltp: [612, 792], ltl: [792, 612] };
             const pk = gv('dlpaper') || 'a4p'; const [PW, PH] = PS[pk] || PS.a4p;
@@ -2186,11 +2312,12 @@
             pg.style.height = targetH + 'px';
             pg.innerHTML = '';
 
-            let col = 0, row = 0;
+            // Calculate how many actually fit on a page vertically
+            let actualFit = 0, col = 0, row = 0;
             for (let i = 0; i < tpp; i++) {
                 const x = margin + col * (tokWpt + gapPt);
                 const y = margin + row * (tokHpt + gapPt);
-                if (y + tokHpt > PH) break; // Exceeds page safely
+                if (y + tokHpt > PH) break;
 
                 const d = document.createElement('div');
                 d.style.position = 'absolute';
@@ -2201,16 +2328,41 @@
                 d.style.width = (tokWpt * scale) + 'px';
                 d.style.height = (tokHpt * scale) + 'px';
                 pg.appendChild(d);
+                actualFit++;
 
                 col++; if (col >= cols) { col = 0; row++; }
             }
+
+            // Live page calculator
+            const total = Math.max(1, parseInt(gv('dltotal')) || parseInt(gv('tcount')) || 20);
+            const perPage = Math.max(1, Math.min(tpp, actualFit || tpp));
+            const frontPages = Math.ceil(total / perPage);
+            const incBack = gc('dlback');
+            const sameBack = gc('dlbacksame');
+            const backPages = sameBack ? 1 : frontPages;
+            const totalPages = frontPages + (incBack ? backPages : 0);
+
+            sv('pgfront', frontPages);
+            sv('pgback', incBack ? (sameBack ? '1 (same)' : backPages) : '—');
+
+            const info = document.getElementById('pginfo');
+            if (info) {
+                let txt = `📋 ${total} tokens × ${perPage}/page = ${frontPages} front page${frontPages > 1 ? 's' : ''}`;
+                if (incBack) {
+                    if (sameBack) {
+                        txt += ` + 1 back page (identical) = ${frontPages + 1} total`;
+                    } else {
+                        txt += ` + ${backPages} back page${backPages > 1 ? 's' : ''} = ${totalPages} total`;
+                    }
+                }
+                if (actualFit < tpp) {
+                    txt += ` ⚠️ Only ${actualFit} fit on page (${tpp} requested)`;
+                }
+                info.textContent = txt;
+            }
         }
 
-        async function dlPDF() {
-            if (!S.tokens.length) doGenerate();
-            if (!S.tokens.length) { notify('No tokens — click Generate first', 'err'); return; }
-            showProg(true); setProg(0, 'Starting…');
-
+        function getPDFLayout() {
             const PS = { a4p: [595.28, 841.89], a4l: [841.89, 595.28], a3p: [841.89, 1190.55], a3l: [1190.55, 841.89], ltp: [612, 792], ltl: [792, 612] };
             const pk = gv('dlpaper') || 'a4p'; const [PW, PH] = PS[pk] || PS.a4p;
             const cols = Math.max(1, parseInt(gv('dlcols')) || 3);
@@ -2218,32 +2370,38 @@
             const qm = parseInt(gv('dlqual')) || 2;
             const gapMm = parseFloat(gv('dlgap')) || 4;
             const gapPt = gapMm * 2.8346, margin = 28;
-            const incBack = gc('dlback');
             const tokWpt = (PW - margin * 2 - gapPt * (cols - 1)) / cols;
             const tokHpt = tokWpt * (S.ch / S.cw);
+            return { PW, PH, cols, tpp, qm, gapPt, margin, tokWpt, tokHpt };
+        }
+
+        async function renderSidePDF(side, fileName, sameForAll) {
+            if (!S.tokens.length) doGenerate();
+            if (!S.tokens.length) { notify('No tokens — click Generate first', 'err'); return; }
+            showProg(true); setProg(0, 'Starting…');
+            const { PW, PH, cols, tpp, qm, gapPt, margin, tokWpt, tokHpt } = getPDFLayout();
             const xc = document.getElementById('xc');
             const pages = []; let cur = [], col = 0, row = 0, pi = 0;
-
             function flush() { if (cur.length) { pages.push(cur); cur = []; col = 0; row = 0; pi++; } }
 
-            // Render front images
-            for (let i = 0; i < S.tokens.length; i++) {
-                if (i % 5 === 0) { setProg(Math.round(i / S.tokens.length * 78), `Rendering ${i + 1}/${S.tokens.length}…`); await new Promise(r => setTimeout(r, 0)); }
-                if (cur.length >= tpp) flush();
-                const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
-                await drawTok(xc, S.tokens[i].code, 'front', qm);
-                cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: pi });
-                col++; if (col >= cols) { col = 0; row++; }
-            }
-            flush();
-
-            if (incBack) {
-                col = 0; row = 0; cur = [];
-                for (let i = 0; i < S.tokens.length; i++) {
-                    if (i % 5 === 0) { setProg(78 + Math.round(i / S.tokens.length * 10), `Rendering back ${i + 1}…`); await new Promise(r => setTimeout(r, 0)); }
+            if (sameForAll) {
+                // Render just one page full of the same back design, matching front layout
+                const singlePageCount = Math.min(tpp, S.tokens.length);
+                for (let i = 0; i < singlePageCount; i++) {
+                    const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
+                    if (y + tokHpt > PH) break;
+                    await drawTok(xc, S.tokens[0].code, side, qm);
+                    cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: 0 });
+                    col++; if (col >= cols) { col = 0; row++; }
+                }
+                flush();
+            } else {
+                const total = S.tokens.length;
+                for (let i = 0; i < total; i++) {
+                    if (i % 5 === 0) { setProg(Math.round(i / total * 85), `Rendering ${side} ${i + 1}/${total}…`); await new Promise(r => setTimeout(r, 0)); }
                     if (cur.length >= tpp) flush();
                     const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
-                    await drawTok(xc, S.tokens[i].code, 'back', qm);
+                    await drawTok(xc, S.tokens[i].code, side, qm);
                     cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: pi });
                     col++; if (col >= cols) { col = 0; row++; }
                 }
@@ -2253,8 +2411,71 @@
             setProg(90, 'Building PDF…'); await new Promise(r => setTimeout(r, 0));
             const blob = await buildPDF(pages, PW, PH);
             setProg(100, 'Saving…');
-            dlBlob(blob, 'TokenForgePro.pdf');
+            dlBlob(blob, fileName);
+            showProg(false); notify(`✓ ${fileName} downloaded!`, 'ok');
+        }
+
+        async function dlPDF() {
+            if (!S.tokens.length) doGenerate();
+            if (!S.tokens.length) { notify('No tokens — click Generate first', 'err'); return; }
+            showProg(true); setProg(0, 'Starting…');
+            const { PW, PH, cols, tpp, qm, gapPt, margin, tokWpt, tokHpt } = getPDFLayout();
+            const incBack = gc('dlback');
+            const sameBack = gc('dlbacksame');
+            const xc = document.getElementById('xc');
+            const pages = []; let cur = [], col = 0, row = 0, pi = 0;
+            function flush() { if (cur.length) { pages.push(cur); cur = []; col = 0; row = 0; pi++; } }
+
+            // Render front images
+            for (let i = 0; i < S.tokens.length; i++) {
+                if (i % 5 === 0) { setProg(Math.round(i / S.tokens.length * 70), `Rendering front ${i + 1}/${S.tokens.length}…`); await new Promise(r => setTimeout(r, 0)); }
+                if (cur.length >= tpp) flush();
+                const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
+                await drawTok(xc, S.tokens[i].code, 'front', qm);
+                cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: pi });
+                col++; if (col >= cols) { col = 0; row++; }
+            }
+            flush();
+
+            // Interleave back pages if requested
+            if (incBack) {
+                if (sameBack) {
+                    // One identical back page after all front pages
+                    col = 0; row = 0; cur = [];
+                    const singlePageCount = Math.min(tpp, S.tokens.length);
+                    for (let i = 0; i < singlePageCount; i++) {
+                        const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
+                        if (y + tokHpt > PH) break;
+                        await drawTok(xc, S.tokens[0].code, 'back', qm);
+                        cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: pi });
+                        col++; if (col >= cols) { col = 0; row++; }
+                    }
+                    flush();
+                } else {
+                    col = 0; row = 0; cur = [];
+                    for (let i = 0; i < S.tokens.length; i++) {
+                        if (i % 5 === 0) { setProg(70 + Math.round(i / S.tokens.length * 18), `Rendering back ${i + 1}…`); await new Promise(r => setTimeout(r, 0)); }
+                        if (cur.length >= tpp) flush();
+                        const x = margin + col * (tokWpt + gapPt); const y = margin + row * (tokHpt + gapPt);
+                        await drawTok(xc, S.tokens[i].code, 'back', qm);
+                        cur.push({ url: xc.toDataURL('image/jpeg', 0.92), x, y, w: tokWpt, h: tokHpt, pw: xc.width, ph: xc.height, pageIdx: pi });
+                        col++; if (col >= cols) { col = 0; row++; }
+                    }
+                    flush();
+                }
+            }
+
+            setProg(92, 'Building PDF…'); await new Promise(r => setTimeout(r, 0));
+            const blob = await buildPDF(pages, PW, PH);
+            setProg(100, 'Saving…');
+            dlBlob(blob, incBack ? 'TokenForgePro_FrontBack.pdf' : 'TokenForgePro_Front.pdf');
             showProg(false); notify('✓ PDF downloaded!', 'ok');
+        }
+
+        async function dlBackPDF() {
+            if (S.els.back.length === 0) { notify('No elements on the back side — switch to BACK and add elements first', 'err'); return; }
+            const sameBack = gc('dlbacksame');
+            await renderSidePDF('back', 'TokenForgePro_BackSide.pdf', sameBack);
         }
 
         // ═══════════════════════════════════════════════════════════
