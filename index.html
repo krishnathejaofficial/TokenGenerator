@@ -6,6 +6,9 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <title>TokenForge Pro</title>
     <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&family=Montserrat:ital,wght@0,400;0,700;1,400&family=Open+Sans:ital,wght@0,400;0,700;1,400&family=Oswald:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Poppins:ital,wght@0,400;0,700;1,400&family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <style>
         * {
             box-sizing: border-box;
@@ -934,13 +937,27 @@
                     <button class="btn btn-g btn-sm" onclick="addTokNum()">🔢 Token Number (auto)</button>
                     <button class="btn btn-g btn-sm" onclick="addImg()">🖼️ Add Logo / Image</button>
                     <button class="btn btn-g btn-sm" onclick="addBg()">🌅 Background Photo</button>
-                    <div class="r2" style="margin:0">
-                        <button class="btn btn-g btn-sm" onclick="addShape('rect')">⬛ Rectangle</button>
-                        <button class="btn btn-g btn-sm" onclick="addShape('circle')">⚫ Circle</button>
-                        <button class="btn btn-g btn-sm" onclick="addShape('line')">— Line</button>
-                        <button class="btn btn-g btn-sm" onclick="addShape('tri')">▲ Triangle</button>
-                        <button class="btn btn-g btn-sm" onclick="addShape('star')">⭐ Star</button>
-                        <button class="btn btn-g btn-sm" onclick="addShape('diamond')">◆ Diamond</button>
+                    <div class="f" style="margin:0"><label style="font-size:10px">Advanced Shapes & Icons</label>
+                        <select class="si" onchange="if(this.value) { addShape(this.value); this.value=''; }" style="height:30px">
+                            <option value="">+ Choose Shape/Icon</option>
+                            <optgroup label="Shapes">
+                                <option value="rect">⬛ Rectangle</option>
+                                <option value="circle">⚫ Circle</option>
+                                <option value="line">— Line</option>
+                                <option value="tri">▲ Triangle</option>
+                                <option value="star">⭐ Star</option>
+                                <option value="diamond">◆ Diamond</option>
+                                <option value="pentagon">⬟ Pentagon</option>
+                                <option value="hexagon">⬡ Hexagon</option>
+                                <option value="octagon">⯃ Octagon</option>
+                            </optgroup>
+                            <optgroup label="Icons">
+                                <option value="heart">❤️ Heart</option>
+                                <option value="check">✔️ Check</option>
+                                <option value="cross">✖️ Cross</option>
+                                <option value="user">👤 User</option>
+                            </optgroup>
+                        </select>
                     </div>
                     <button class="btn btn-b btn-sm" onclick="addQR()">📱 QR Code (auto token)</button>
                     <button class="btn btn-r btn-sm" onclick="addBC()">📊 Barcode (auto token)</button>
@@ -1194,6 +1211,7 @@
         };
 
         const FONTS = [
+            'Roboto', 'Montserrat', 'Open Sans', 'Oswald', 'Lato', 'Poppins', 'Playfair Display',
             'Arial', 'Arial Black', 'Verdana', 'Tahoma', 'Trebuchet MS', 'Impact', 'Comic Sans MS',
             'Times New Roman', 'Georgia', 'Palatino Linotype', 'Book Antiqua', 'Garamond',
             'Courier New', 'Lucida Console', 'Lucida Sans Unicode', 'Consolas',
@@ -1386,7 +1404,14 @@
                 line: { w: 190, h: 4, fc2: '#333', sc: '#333', sw: 2 },
                 tri: { w: 80, h: 65, fc2: '#44bb66', sc: '#228844', sw: 0 },
                 star: { w: 65, h: 65, fc2: '#ffcc00', sc: '#cc9900', sw: 0 },
-                diamond: { w: 60, h: 80, fc2: '#cc44ff', sc: '#8822cc', sw: 0 }
+                diamond: { w: 60, h: 80, fc2: '#cc44ff', sc: '#8822cc', sw: 0 },
+                pentagon: { w: 70, h: 70, fc2: '#1188ff', sc: '#0055aa', sw: 0 },
+                hexagon: { w: 75, h: 65, fc2: '#ff8811', sc: '#aa5500', sw: 0 },
+                octagon: { w: 70, h: 70, fc2: '#ea1155', sc: '#990022', sw: 0 },
+                heart: { w: 60, h: 55, fc2: '#ff2244', sc: '#aa0011', sw: 0 },
+                check: { w: 50, h: 50, fc2: '#22cc44', sc: '#008811', sw: 0 },
+                cross: { w: 50, h: 50, fc2: '#ee2222', sc: '#990000', sw: 0 },
+                user: { w: 50, h: 60, fc2: '#445566', sc: '#112233', sw: 0 }
             };
             const d = D[sh] || D.rect;
             S.els[S.side].push(Object.assign({ id: mkId(), side: S.side, et: 'shape', sh, x: 30, y: 30, op: 100, rot: 0, vis: true }, d));
@@ -1521,12 +1546,36 @@
             svg.style.cssText = 'overflow:visible;pointer-events:none;';
             const sa = (e, a) => Object.entries(a).forEach(([k, v]) => e.setAttribute(k, v));
             const ap = nm => { const p = document.createElementNS('http://www.w3.org/2000/svg', 'polygon'); sa(p, { points: nm, fill: el.fc2, stroke: el.sc, 'stroke-width': sw }); return p; };
-            if (el.sh === 'rect') { const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); sa(r, { x: sw / 2, y: sw / 2, width: w - sw, height: h - sw, fill: el.fc2, stroke: el.sc, 'stroke-width': sw }); svg.appendChild(r); }
+            if (el.sh === 'rect') { const r = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); sa(r, { x: sw / 2, y: sw / 2, width: w - sw, height: h - sw, fill: el.fc2, stroke: el.sc, 'stroke-width': sw, rx: el.sw*2 }); svg.appendChild(r); }
             else if (el.sh === 'circle') { const c = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse'); sa(c, { cx: w / 2, cy: h / 2, rx: w / 2 - sw / 2, ry: h / 2 - sw / 2, fill: el.fc2, stroke: el.sc, 'stroke-width': sw }); svg.appendChild(c); }
             else if (el.sh === 'line') { const l = document.createElementNS('http://www.w3.org/2000/svg', 'line'); sa(l, { x1: 0, y1: h / 2, x2: w, y2: h / 2, stroke: el.fc2, 'stroke-width': h }); svg.appendChild(l); }
             else if (el.sh === 'tri') svg.appendChild(ap(`${w / 2},${sw} ${w - sw},${h - sw} ${sw},${h - sw}`));
             else if (el.sh === 'star') { const or = Math.min(w, h) / 2 - sw, ir = or * 0.4; const pts = Array.from({ length: 10 }, (_, i) => { const r = i % 2 ? ir : or, a = (Math.PI / 5) * i - Math.PI / 2; return `${w / 2 + r * Math.cos(a)},${h / 2 + r * Math.sin(a)}`; }).join(' '); svg.appendChild(ap(pts)); }
             else if (el.sh === 'diamond') svg.appendChild(ap(`${w / 2},${sw} ${w - sw},${h / 2} ${w / 2},${h - sw} ${sw},${h / 2}`));
+            else if (el.sh === 'pentagon' || el.sh === 'hexagon' || el.sh === 'octagon') {
+                const sides = el.sh === 'pentagon' ? 5 : el.sh === 'hexagon' ? 6 : 8;
+                const r = Math.min(w, h) / 2 - sw; const cx = w/2, cy = h/2;
+                const pts = Array.from({ length: sides }, (_, i) => { const a = (Math.PI*2 / sides) * i - Math.PI / 2; return `${cx + r * Math.cos(a)},${cy + r * Math.sin(a)}`; }).join(' ');
+                svg.appendChild(ap(pts));
+            }
+            else if (el.sh === 'heart') {
+                const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                sa(p, { d: `M ${w/2},${h*0.3} C ${w/2},${sw} ${sw},${sw} ${sw},${h*0.4} C ${sw},${h*0.7} ${w*0.3},${h*0.8} ${w/2},${h-sw} C ${w*0.7},${h*0.8} ${w-sw},${h*0.7} ${w-sw},${h*0.4} C ${w-sw},${sw} ${w/2},${sw} ${w/2},${h*0.3}`, fill: el.fc2, stroke: el.sc, 'stroke-width': sw }); svg.appendChild(p);
+            }
+            else if (el.sh === 'check') {
+                const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                sa(p, { d: `M ${w*0.1},${h*0.5} L ${w*0.4},${h*0.8} L ${w*0.9},${h*0.1}`, fill: 'none', stroke: el.fc2, 'stroke-width': Math.max(2, h*0.2), 'stroke-linecap': 'round', 'stroke-linejoin': 'round' }); svg.appendChild(p);
+            }
+            else if (el.sh === 'cross') {
+                const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                sa(p, { d: `M ${w*0.1},${h*0.1} L ${w*0.9},${h*0.9} M ${w*0.9},${h*0.1} L ${w*0.1},${h*0.9}`, fill: 'none', stroke: el.fc2, 'stroke-width': Math.max(2, h*0.2), 'stroke-linecap': 'round' }); svg.appendChild(p);
+            }
+            else if (el.sh === 'user') {
+                const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+                const p1 = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse'); sa(p1, { cx: w/2, cy: h*0.3, rx: w*0.25, ry: h*0.25, fill: el.fc2, stroke: el.sc, 'stroke-width': sw });
+                const p2 = document.createElementNS('http://www.w3.org/2000/svg', 'path'); sa(p2, { d: `M ${w*0.1},${h} C ${w*0.1},${h*0.5} ${w*0.9},${h*0.5} ${w*0.9},${h}`, fill: el.fc2, stroke: el.sc, 'stroke-width': sw });
+                g.appendChild(p1); g.appendChild(p2); svg.appendChild(g);
+            }
             return svg;
         }
 
@@ -1598,6 +1647,13 @@
         // ═══════════════════════════════════════════════════════════
         // SELECT / PROPERTIES
         // ═══════════════════════════════════════════════════════════
+        const SWATCHES = ['#ffffff', '#000000', '#eb3b5a', '#fa8231', '#f7b731', '#20bf6b', '#0fb9b1', '#2d98da', '#3867d6', '#8854d0', '#a5b1c2', '#4b6584'];
+        function mkSwt(k, cur) {
+            return `<div style="display:flex;gap:3px;margin-top:4px;flex-wrap:wrap">` +
+                SWATCHES.map(c => `<div style="width:16px;height:16px;border-radius:3px;border:1px solid rgba(0,0,0,0.2);background:${c};cursor:pointer${cur===c?';box-shadow:0 0 0 2px var(--ac)':''}" onclick="sp('${k}','${c}')"></div>`).join('') +
+            `</div>`;
+        }
+
         function selEl(id) { S.sel = id; render(); updateProps(); const el = gEl(id); document.getElementById('stsel').textContent = el ? '▶ ' + el.et.toUpperCase() + ' selected' : ''; }
 
         function updateProps() {
@@ -1636,7 +1692,7 @@
       </div>
       <div class="r2">
         <div class="f"><label>Font Size (px)</label><input type="number" value="${el.fs}" min="4" max="300" onchange="sp('fs',+this.value)"></div>
-        <div class="f"><label>Text Color</label><input type="color" value="${el.fc}" oninput="sp('fc',this.value)"></div>
+        <div class="f"><label>Text Color</label><input type="color" value="${el.fc}" oninput="sp('fc',this.value)">${mkSwt('fc', el.fc)}</div>
       </div>
       <div class="f"><label>Font Family (${FONTS.length} fonts)</label>
         <select onchange="sp('ff',this.value)">${FONTS.map(f => `<option value="${f}" ${el.ff === f ? 'selected' : ''}>${f}</option>`).join('')}</select>
@@ -1649,8 +1705,8 @@
             if (el.et === 'shape') {
                 h += `<div class="psec"><div class="phd">🎨 Shape</div>
       <div class="r2">
-        <div class="f"><label>Fill</label><input type="color" value="${el.fc2}" oninput="sp('fc2',this.value)"></div>
-        <div class="f"><label>Stroke</label><input type="color" value="${el.sc}" oninput="sp('sc',this.value)"></div>
+        <div class="f"><label>Fill</label><input type="color" value="${el.fc2}" oninput="sp('fc2',this.value)">${mkSwt('fc2', el.fc2)}</div>
+        <div class="f"><label>Stroke</label><input type="color" value="${el.sc}" oninput="sp('sc',this.value)">${mkSwt('sc', el.sc)}</div>
       </div>
       <div class="f"><label>Stroke Width</label><input type="number" value="${el.sw || 0}" min="0" max="30" onchange="sp('sw',+this.value)"></div></div>`;
             }
@@ -1661,7 +1717,10 @@
         <option ${el.fit === 'cover' ? 'selected' : ''} value="cover">Cover (crop)</option>
         <option ${el.fit === 'fill' ? 'selected' : ''} value="fill">Stretch</option>
       </select></div>
-      <div class="hs" style="margin-top:6px"><button class="btn btn-b btn-xs btn-full" onclick="rmBg('${el.id}')">✨ Remove Background (Auto)</button></div>
+      <div class="hs" style="margin-top:6px;gap:4px">
+        <button class="btn btn-b btn-xs btn-full" onclick="rmBg('${el.id}')">✨ Remove BG</button>
+        <button class="btn btn-g btn-xs btn-full" onclick="enhanceImg('${el.id}')">📸 Enhance</button>
+      </div>
       </div>`;
             }
             h += `<div class="hs" style="margin-top:4px">
@@ -1714,28 +1773,61 @@
         }
 
         function rmBg(id) {
-            const el = gEl(id);
-            if (!el || !el.src) return;
+            const el = gEl(id); if (!el || !el.src) return;
             const img = new Image();
             img.onload = () => {
-                const cv = document.createElement('canvas');
-                cv.width = img.width; cv.height = img.height;
+                const cv = document.createElement('canvas'); cv.width = img.width; cv.height = img.height;
                 const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0);
-                const obj = ctx.getImageData(0, 0, cv.width, cv.height);
-                const d = obj.data;
+                const w = img.width, h = img.height;
+                const obj = ctx.getImageData(0, 0, w, h); const d = obj.data;
                 const br = d[0], bg = d[1], bb = d[2];
-                if (d[3] === 0 && d[7] === 0) { notify('Image might already be transparent', 'info'); }
-                const tol = 32; 
-                for (let i = 0; i < d.length; i += 4) {
-                    if (d[i + 3] === 0) continue;
-                    if (Math.abs(d[i] - br) <= tol && Math.abs(d[i + 1] - bg) <= tol && Math.abs(d[i + 2] - bb) <= tol) {
-                        d[i + 3] = 0;
+                const tol = 40;
+                const match = (i) => Math.abs(d[i]-br)<=tol && Math.abs(d[i+1]-bg)<=tol && Math.abs(d[i+2]-bb)<=tol && d[i+3]>0;
+                const vis = new Uint8Array(w*h);
+                const Q = [];
+                const addQ = (px, py) => { let p = py*w+px; if(!vis[p]){vis[p]=1; Q.push(p);} };
+                addQ(0,0); addQ(w-1,0); addQ(0,h-1); addQ(w-1,h-1);
+                let head = 0;
+                while(head < Q.length) {
+                    const p = Q[head++]; 
+                    const x = p%w, y = Math.floor(p/w), i = p*4;
+                    if (match(i)) {
+                        d[i+3] = 0;
+                        if(x>0) addQ(x-1,y);
+                        if(x<w-1) addQ(x+1,y);
+                        if(y>0) addQ(x,y-1);
+                        if(y<h-1) addQ(x,y+1);
+                    } else if (d[i+3]>0 && d[i+3]>200) {
+                        d[i+3] -= 100; // Edge smoothing
                     }
                 }
-                ctx.putImageData(obj, 0, 0);
-                el.src = cv.toDataURL('image/png');
-                saveU(); render(); updateProps();
-                notify('Background removed successfully!', 'ok');
+                ctx.putImageData(obj, 0, 0); el.src = cv.toDataURL('image/png');
+                saveU(); render(); updateProps(); notify('Masked cleanly via Flood-Fill!', 'ok');
+            };
+            img.src = el.src;
+        }
+
+        function enhanceImg(id) {
+            const el = gEl(id); if (!el || !el.src) return;
+            const img = new Image();
+            img.onload = () => {
+                const cv = document.createElement('canvas'); cv.width = img.width; cv.height = img.height;
+                const ctx = cv.getContext('2d'); ctx.drawImage(img, 0, 0);
+                const obj = ctx.getImageData(0, 0, cv.width, cv.height); const d = obj.data;
+                const factor = (259 * (30 + 255)) / (255 * (259 - 30)); // Contrast boost
+                for (let i = 0; i < d.length; i += 4) {
+                    if(d[i+3]===0) continue;
+                    d[i]   = Math.min(255, Math.max(0, factor * (d[i] - 128) + 128));
+                    d[i+1] = Math.min(255, Math.max(0, factor * (d[i+1] - 128) + 128));
+                    d[i+2] = Math.min(255, Math.max(0, factor * (d[i+2] - 128) + 128));
+                    if (i > cv.width*4 && i < d.length - cv.width*4) {
+                        d[i] = Math.min(255, d[i] + (d[i] - d[i-4])*0.15); // subtle sharpen
+                        d[i+1] = Math.min(255, d[i+1] + (d[i+1] - d[i-3])*0.15);
+                        d[i+2] = Math.min(255, d[i+2] + (d[i+2] - d[i-2])*0.15);
+                    }
+                }
+                ctx.putImageData(obj, 0, 0); el.src = cv.toDataURL('image/png');
+                saveU(); render(); notify('Image accurately enhanced!', 'ok');
             };
             img.src = el.src;
         }
