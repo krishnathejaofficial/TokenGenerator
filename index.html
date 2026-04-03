@@ -2180,7 +2180,7 @@
                 lines.forEach((line, i) => { const ty = el.y + el.h / 2 - ((lines.length - 1) * lh) / 2 + i * lh; ctx.fillText(line, tx, ty); });
                 ctx.letterSpacing = '';
             }
-            else if (el.et === 'shape') { drawShape(ctx, el); }
+            else if (el.et === 'shape') { await drawShape(ctx, el); }
             else if (el.et === 'qr') {
                 const val = getQRVal(code); const px = Math.round(el.w * 2);
                 const qcv = makeQR(val, px, gv('qrfg') || '#000000', gv('qrbg') || '#ffffff');
@@ -2194,13 +2194,55 @@
         }
 
         function drawShape(ctx, el) {
-            ctx.fillStyle = el.fc2; ctx.strokeStyle = el.sc; ctx.lineWidth = el.sw || 0; const sw = el.sw || 0;
-            if (el.sh === 'rect') { ctx.fillRect(el.x, el.y, el.w, el.h); if (sw) ctx.strokeRect(el.x, el.y, el.w, el.h); }
-            else if (el.sh === 'circle') { ctx.beginPath(); ctx.ellipse(el.x + el.w / 2, el.y + el.h / 2, el.w / 2 - sw / 2, el.h / 2 - sw / 2, 0, 0, Math.PI * 2); ctx.fill(); if (sw) ctx.stroke(); }
-            else if (el.sh === 'line') { ctx.strokeStyle = el.fc2; ctx.lineWidth = el.h; ctx.beginPath(); ctx.moveTo(el.x, el.y + el.h / 2); ctx.lineTo(el.x + el.w, el.y + el.h / 2); ctx.stroke(); }
-            else if (el.sh === 'tri') { ctx.beginPath(); ctx.moveTo(el.x + el.w / 2, el.y); ctx.lineTo(el.x + el.w, el.y + el.h); ctx.lineTo(el.x, el.y + el.h); ctx.closePath(); ctx.fill(); if (sw) ctx.stroke(); }
-            else if (el.sh === 'star') { const or = Math.min(el.w, el.h) / 2 - sw, ir = or * 0.4; ctx.beginPath(); for (let i = 0; i < 10; i++) { const r = i % 2 ? ir : or, a = (Math.PI / 5) * i - Math.PI / 2; i === 0 ? ctx.moveTo(el.x + el.w / 2 + r * Math.cos(a), el.y + el.h / 2 + r * Math.sin(a)) : ctx.lineTo(el.x + el.w / 2 + r * Math.cos(a), el.y + el.h / 2 + r * Math.sin(a)); } ctx.closePath(); ctx.fill(); if (sw) ctx.stroke(); }
-            else if (el.sh === 'diamond') { ctx.beginPath(); ctx.moveTo(el.x + el.w / 2, el.y); ctx.lineTo(el.x + el.w, el.y + el.h / 2); ctx.lineTo(el.x + el.w / 2, el.y + el.h); ctx.lineTo(el.x, el.y + el.h / 2); ctx.closePath(); ctx.fill(); if (sw) ctx.stroke(); }
+            return new Promise(resolve => {
+                const ast = ASSETS.find(a => a.id === el.sh);
+                if (!ast) {
+                    // Fallback for unknown shapes: simple filled rect
+                    ctx.fillStyle = el.fc2 || '#000';
+                    ctx.fillRect(el.x, el.y, el.w, el.h);
+                    resolve(); return;
+                }
+                const sw = el.sw || 0;
+                const vb = 22;
+                // Build an SVG string with fill/stroke applied
+                let inner = ast.svg;
+                // Create a full SVG document
+                let svgStr = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${vb} ${vb}" width="${Math.round(el.w * 2)}" height="${Math.round(el.h * 2)}" preserveAspectRatio="none">`;
+                // Apply global styles based on shape/icon type
+                if (ast.c === 'Shapes') {
+                    if (ast.id === 'line') {
+                        svgStr += `<g stroke="${el.fc2 || '#000'}" stroke-width="${el.h / el.w * vb}" fill="none">`;
+                    } else {
+                        svgStr += `<g fill="${el.fc2 || '#000'}" stroke="${sw > 0 ? (el.sc || '#000') : 'none'}" stroke-width="${sw > 0 ? (sw / Math.min(el.w, el.h) * vb) : 0}">`;
+                    }
+                } else {
+                    // Icons
+                    if (ast.f === 'n-fil') {
+                        const iconSw = sw > 0 ? (sw / Math.min(el.w, el.h) * vb) : 2;
+                        svgStr += `<g fill="none" stroke="${el.fc2 || '#000'}" stroke-width="${iconSw}" stroke-linecap="round" stroke-linejoin="round">`;
+                    } else {
+                        svgStr += `<g fill="${el.fc2 || '#000'}" stroke="${sw > 0 ? (el.sc || '#000') : 'none'}" stroke-width="${sw > 0 ? (sw / Math.min(el.w, el.h) * vb) : 0}">`;
+                    }
+                }
+                svgStr += inner + '</g></svg>';
+
+                const img = new Image();
+                const blob = new Blob([svgStr], { type: 'image/svg+xml' });
+                const url = URL.createObjectURL(blob);
+                img.onload = () => {
+                    ctx.drawImage(img, el.x, el.y, el.w, el.h);
+                    URL.revokeObjectURL(url);
+                    resolve();
+                };
+                img.onerror = () => {
+                    // Fallback: draw a colored rect
+                    ctx.fillStyle = el.fc2 || '#000';
+                    ctx.fillRect(el.x, el.y, el.w, el.h);
+                    URL.revokeObjectURL(url);
+                    resolve();
+                };
+                img.src = url;
+            });
         }
 
         // ═══════════════════════════════════════════════════════════
