@@ -1085,30 +1085,44 @@
             </div>
 
             <div class="sec">
-                <div class="shd">QR Code Settings (Barcode uses token #)</div>
+                <div class="shd">QR Code Settings</div>
                 <div class="f"><label>QR Link/Text</label>
                     <select id="qrenc" onchange="toggleQRF(); render()">
                         <option value="num">Token Number Only</option>
-                        <option value="url">URL + Token Number</option>
-                        <option value="cst">Custom Text + Token</option>
+                        <option value="url">URL Only</option>
+                        <option value="cst">Custom Text Only</option>
                     </select>
                 </div>
-                <div class="f" id="qurlrow" style="display:none"><label>URL Prefix</label><input type="text" id="qurl"
-                        placeholder="https://site.com/verify/" oninput="render()"></div>
-                <div class="f" id="qcstrow" style="display:none"><label>Custom Prefix</label><input type="text"
-                        id="qcst" placeholder="TOKEN:" oninput="render()"></div>
+                <div class="f" id="qurlrow" style="display:none"><label>URL Link</label><input type="text" id="qurl"
+                        placeholder="https://site.com/" oninput="render()"></div>
+                <div class="f" id="qcstrow" style="display:none"><label>Custom Text</label><input type="text"
+                        id="qcst" placeholder="Enter text..." oninput="render()"></div>
                 <div class="r2">
                     <div class="f"><label>QR Color</label><input type="color" id="qrfg" value="#000000"
                             oninput="render()"></div>
                     <div class="f"><label>QR Background</label><input type="color" id="qrbg" value="#ffffff"
                             oninput="render()"></div>
                 </div>
+
+                <div class="shd" style="margin-top:10px">Barcode Settings</div>
+                <div class="f"><label>Barcode Content</label>
+                    <select id="bcenc" onchange="toggleBCF(); render()">
+                        <option value="num">Token Number Only</option>
+                        <option value="url">URL Only</option>
+                        <option value="cst">Custom Text Only</option>
+                    </select>
+                </div>
+                <div class="f" id="bcurlrow" style="display:none"><label>URL Link</label><input type="text" id="bcurl"
+                        placeholder="https://site.com/" oninput="render()"></div>
+                <div class="f" id="bccstrow" style="display:none"><label>Custom Text</label><input type="text"
+                        id="bccst" placeholder="Enter text..." oninput="render()"></div>
                 <div class="r2">
                     <div class="f"><label>Barcode Color</label><input type="color" id="bcfg" value="#000000"
                             oninput="render()"></div>
                     <div class="f"><label>Barcode BG</label><input type="color" id="bcbg" value="#ffffff"
                             oninput="render()"></div>
                 </div>
+
                 <div class="tip"><b>📱 Scanner → Excel:</b> Download Scanner Excel, open it, click last column, scan any
                     token → code types itself!</div>
             </div>
@@ -1340,14 +1354,25 @@
 
         function getQRVal(code) {
             const t = gv('qrenc');
-            if (t === 'url') return (gv('qurl') || '') + code;
-            if (t === 'cst') return (gv('qcst') || '') + code;
+            if (t === 'url') return gv('qurl') || '';
+            if (t === 'cst') return gv('qcst') || '';
+            return code;
+        }
+        function getBCVal(code) {
+            const t = gv('bcenc');
+            if (t === 'url') return gv('bcurl') || '';
+            if (t === 'cst') return gv('bccst') || '';
             return code;
         }
         function toggleQRF() {
             const v = gv('qrenc');
             document.getElementById('qurlrow').style.display = v === 'url' ? 'block' : 'none';
             document.getElementById('qcstrow').style.display = v === 'cst' ? 'block' : 'none';
+        }
+        function toggleBCF() {
+            const v = gv('bcenc');
+            document.getElementById('bcurlrow').style.display = v === 'url' ? 'block' : 'none';
+            document.getElementById('bccstrow').style.display = v === 'cst' ? 'block' : 'none';
         }
 
         function doGenerate() {
@@ -1519,7 +1544,7 @@
             else if (el.et === 'bc') {
                 div.style.cssText += ';background:#fff;display:flex;align-items:center;justify-content:center;overflow:hidden;';
                 try {
-                    const bval = code;
+                    const bval = getBCVal(code);
                     const bcv = makeBC(bval, Math.round(el.w * z), Math.round(el.h * z), gv('bcfg') || '#000000', gv('bcbg') || '#ffffff');
                     bcv.style.width = '100%'; bcv.style.height = '100%'; bcv.style.pointerEvents = 'none';
                     div.style.background = gv('bcbg') || '#ffffff';
