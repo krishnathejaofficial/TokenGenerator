@@ -830,6 +830,15 @@
             font-family: monospace
         }
 
+        .g-line {
+            position: absolute;
+            background: #ff00ff;
+            z-index: 9000;
+            pointer-events: none;
+        }
+        .g-line.v { width: 1px; height: 200%; top: -50%; }
+        .g-line.h { height: 1px; width: 200%; left: -50%; }
+
         /* Responsive Layout for Mobile */
         @media (max-width: 900px) {
             body { overflow: auto; }
@@ -853,7 +862,9 @@
                 overflow-y: visible;
             }
             #carea {
-                height: 50vh; min-height: 380px; flex-shrink: 0;
+                height: 45vh; min-height: 300px; flex-shrink: 0;
+                position: sticky; top: 76px; z-index: 50;
+                box-shadow: 0 10px 20px rgba(0,0,0,0.7);
             }
             #stb {
                 position: fixed; bottom: 0; left: 0; right: 0;
@@ -1407,6 +1418,7 @@
                 applyBG(card);
                 S.els[side].forEach(el => { if (!el.vis) return; card.appendChild(mkDOM(el, prc)); });
                 if (side === 'back') { const b = document.createElement('div'); b.className = 'blbl'; b.textContent = 'BACK SIDE'; card.appendChild(b); }
+                const g = document.createElement('div'); g.id = 'gds_' + side; g.style.cssText = 'position:absolute;inset:0;pointer-events:none;z-index:9000;'; card.appendChild(g);
             });
             document.getElementById('stel').textContent = S.els[S.side].length;
             renderLayers();
@@ -1492,7 +1504,7 @@
                 }
             }
 
-            if (el.id === S.sel) {
+            if (el.id === S.sel && !el.lck) {
                 const rh = document.createElement('div'); rh.className = 'rh'; div.appendChild(rh);
                 const roh = document.createElement('div'); roh.className = 'roh'; div.appendChild(roh);
             }
@@ -1524,7 +1536,7 @@
         function getEvP(e){ return e.touches && e.touches.length > 0 ? e.touches[0] : e; }
         function startDrag(ev, id) {
             if (ev.button !== undefined && ev.button !== 0) return; if(ev.cancelable !== false) ev.preventDefault(); ev.stopPropagation();
-            selEl(id); const el = gEl(id); if (!el) return; const t = ev.target;
+            selEl(id); const el = gEl(id); if (!el || el.lck) return; const t = ev.target;
             const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY;
             if (t.classList.contains('rh')) {
                 S.rsz = { id, sx: cx, sy: cy, ow: el.w, oh: el.h };
@@ -1541,8 +1553,41 @@
                 document.addEventListener('mouseup', stopDrag); document.addEventListener('touchend', stopDrag);
             }
         }
-        function doDrag(ev) { if (!S.drag) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.drag.id); if (!el) return; el.x = S.drag.ox + (cx - S.drag.sx) / S.zoom; el.y = S.drag.oy + (cy - S.drag.sy) / S.zoom; const d = document.querySelector(`[data-id="${S.drag.id}"]`); if (d) { d.style.left = el.x * S.zoom + 'px'; d.style.top = el.y * S.zoom + 'px'; } }
-        function stopDrag() { if (S.drag) { saveU(); updateProps(); } S.drag = null; document.removeEventListener('mousemove', doDrag); document.removeEventListener('touchmove', doDrag); document.removeEventListener('mouseup', stopDrag); document.removeEventListener('touchend', stopDrag); }
+        function doDrag(ev) {
+            if (!S.drag) return; if(ev.cancelable !== false) ev.preventDefault();
+            const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.drag.id); if (!el) return;
+            let nx = S.drag.ox + (cx - S.drag.sx) / S.zoom;
+            let ny = S.drag.oy + (cy - S.drag.sy) / S.zoom;
+            
+            const gds = document.getElementById('gds_' + S.side); if (gds) gds.innerHTML = '';
+            const snap = 5, cx1 = nx + el.w / 2, cy1 = ny + el.h / 2;
+            let sx = null, sy = null;
+            
+            if (Math.abs(cx1 - S.cw / 2) < snap) sx = S.cw / 2;
+            if (Math.abs(cy1 - S.ch / 2) < snap) sy = S.ch / 2;
+            
+            S.els[S.side].filter(e => e.id !== el.id && e.vis && !e.lck).forEach(e => {
+                const cx2 = e.x + e.w / 2, cy2 = e.y + e.h / 2;
+                if (Math.abs(cx1 - cx2) < snap) sx = cx2;
+                if (Math.abs(cy1 - cy2) < snap) sy = cy2;
+            });
+            S.els[S.side].filter(e => e.id !== el.id && e.vis && e.lck).forEach(e => {
+                const cx2 = e.x + e.w / 2, cy2 = e.y + e.h / 2;
+                if (Math.abs(cx1 - cx2) < snap) sx = cx2;
+                if (Math.abs(cy1 - cy2) < snap) sy = cy2;
+            });
+            
+            if (sx !== null) { nx = sx - el.w / 2; if (gds) gds.innerHTML += `<div class="g-line v" style="left:${sx * S.zoom}px"></div>`; }
+            if (sy !== null) { ny = sy - el.h / 2; if (gds) gds.innerHTML += `<div class="g-line h" style="top:${sy * S.zoom}px"></div>`; }
+            
+            el.x = nx; el.y = ny;
+            const d = document.querySelector(`[data-id="${S.drag.id}"]`);
+            if (d) { d.style.left = el.x * S.zoom + 'px'; d.style.top = el.y * S.zoom + 'px'; }
+        }
+        function stopDrag() {
+            if (S.drag) { const gds = document.getElementById('gds_' + S.side); if (gds) gds.innerHTML = ''; saveU(); updateProps(); }
+            S.drag = null; document.removeEventListener('mousemove', doDrag); document.removeEventListener('touchmove', doDrag); document.removeEventListener('mouseup', stopDrag); document.removeEventListener('touchend', stopDrag);
+        }
         function doRsz(ev) { if (!S.rsz) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rsz.id); if (!el) return; el.w = Math.max(10, S.rsz.ow + (cx - S.rsz.sx) / S.zoom); el.h = Math.max(10, S.rsz.oh + (cy - S.rsz.sy) / S.zoom); render(); updateProps(); }
         function stopRsz() { if (S.rsz) saveU(); S.rsz = null; document.removeEventListener('mousemove', doRsz); document.removeEventListener('touchmove', doRsz); document.removeEventListener('mouseup', stopRsz); document.removeEventListener('touchend', stopRsz); }
         function doRot(ev) { if (!S.rot) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rot.id); if (!el) return; el.rot = Math.round(Math.atan2(cy - S.rot.cy, cx - S.rot.cx) * 180 / Math.PI + 90); const d = document.querySelector(`[data-id="${S.rot.id}"]`); if (d) d.style.transform = `rotate(${el.rot}deg)`; }
@@ -1561,17 +1606,19 @@
             if (!el) { pp.innerHTML = '<div class="pnone">Click any element on the canvas</div>'; return; }
             let h = `<div class="psec"><div class="phd">📐 Position & Size</div>
     <div class="r2">
-      <div class="f"><label>X</label><input type="number" value="${Math.round(el.x)}" onchange="sp('x',+this.value)"></div>
-      <div class="f"><label>Y</label><input type="number" value="${Math.round(el.y)}" onchange="sp('y',+this.value)"></div>
+      <div class="f"><label>X</label><input type="number" value="${Math.round(el.x)}" onchange="sp('x',+this.value)" ${el.lck?'disabled':''}></div>
+      <div class="f"><label>Y</label><input type="number" value="${Math.round(el.y)}" onchange="sp('y',+this.value)" ${el.lck?'disabled':''}></div>
     </div>
     <div class="r2">
-      <div class="f"><label>Width</label><input type="number" value="${Math.round(el.w)}" min="2" onchange="sp('w',+this.value)"></div>
-      <div class="f"><label>Height</label><input type="number" value="${Math.round(el.h)}" min="2" onchange="sp('h',+this.value)"></div>
+      <div class="f"><label>Width</label><input type="number" value="${Math.round(el.w)}" min="2" onchange="sp('w',+this.value)" ${el.lck?'disabled':''}></div>
+      <div class="f"><label>Height</label><input type="number" value="${Math.round(el.h)}" min="2" onchange="sp('h',+this.value)" ${el.lck?'disabled':''}></div>
     </div>
     <div class="r2">
-      <div class="f"><label>Rotate °</label><input type="number" value="${el.rot || 0}" onchange="sp('rot',+this.value)"></div>
+      <div class="f"><label>Rotate °</label><input type="number" value="${el.rot || 0}" onchange="sp('rot',+this.value)" ${el.lck?'disabled':''}></div>
       <div class="f"><label>Opacity %</label><input type="number" value="${el.op ?? 100}" min="0" max="100" onchange="sp('op',+this.value)"></div>
-    </div></div>`;
+    </div>
+    <div class="f" style="margin-top:6px"><label class="ck"><input type="checkbox" ${el.lck?'checked':''} onchange="sp('lck',this.checked)"> 🔒 Lock Position / Size</label></div>
+    </div>`;
 
             if (el.et === 'text' || el.et === 'tn') {
                 h += `<div class="psec"><div class="phd">✏️ Text Style</div>
@@ -1638,7 +1685,7 @@
             const ic = { text: '✏️', tn: '🔢', img: '🖼️', bg: '🌅', shape: '⬛', qr: '📱', bc: '📊' };
             arr.forEach(el => {
                 const d = document.createElement('div'); d.className = 'li' + (el.id === S.sel ? ' on' : ''); d.onclick = () => selEl(el.id);
-                d.innerHTML = `<span style="font-size:12px">${ic[el.et] || '•'}</span><span class="lname">${(el.et === 'text' || el.et === 'tn') ? esc(el.text || '').substring(0, 16) : el.et.toUpperCase()}</span><span style="cursor:pointer;color:var(--mt);font-size:11px;padding:2px" onclick="event.stopPropagation();el.vis=!el.vis;render()">${el.vis ? '👁' : '🚫'}</span>`;
+                d.innerHTML = `<span style="font-size:12px">${ic[el.et] || '•'}</span><span class="lname">${(el.et === 'text' || el.et === 'tn') ? esc(el.text || '').substring(0, 16) : el.et.toUpperCase()}</span><span style="cursor:pointer;color:var(--mt);font-size:11px;padding:2px;margin-right:2px" onclick="event.stopPropagation();el.lck=!el.lck;render();updateProps();">${el.lck ? '🔒' : '🔓'}</span><span style="cursor:pointer;color:var(--mt);font-size:11px;padding:2px" onclick="event.stopPropagation();el.vis=!el.vis;render()">${el.vis ? '👁' : '🚫'}</span>`;
                 ll.appendChild(d);
             });
         }
