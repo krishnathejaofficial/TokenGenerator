@@ -829,6 +829,41 @@
             color: var(--mt);
             font-family: monospace
         }
+
+        /* Responsive Layout for Mobile */
+        @media (max-width: 900px) {
+            body { overflow: auto; }
+            #app {
+                display: flex;
+                flex-direction: column;
+                height: auto;
+                min-height: 100vh;
+                padding-bottom: 40px;
+            }
+            #hdr {
+                position: sticky; top: 0;
+                flex-wrap: wrap; height: auto; padding: 10px; justify-content: center;
+                gap: 8px;
+            }
+            #hdr .logo { width: 100%; text-align: center; margin-bottom: 2px; }
+            #hdr .hsp { display: none; }
+            #sbl, #sbr {
+                border-right: none; border-left: none;
+                border-top: 1px solid var(--bd);
+                overflow-y: visible;
+            }
+            #carea {
+                height: 50vh; min-height: 380px; flex-shrink: 0;
+            }
+            #stb {
+                position: fixed; bottom: 0; left: 0; right: 0;
+                flex-wrap: wrap; height: auto; padding: 6px 14px;
+                border-top: 1px solid var(--bd); justify-content: center;
+                gap: 8px;
+            }
+            #cwrap { padding: 15px; }
+            .dlg { grid-template-columns: 1fr; }
+        }
     </style>
 </head>
 
@@ -1462,6 +1497,7 @@
                 const roh = document.createElement('div'); roh.className = 'roh'; div.appendChild(roh);
             }
             div.addEventListener('mousedown', ev => startDrag(ev, el.id));
+            div.addEventListener('touchstart', ev => startDrag(ev, el.id), {passive: false});
             div.addEventListener('contextmenu', ev => { ev.preventDefault(); ev.stopPropagation(); showCtx(ev); selEl(el.id); });
             return div;
         }
@@ -1485,27 +1521,32 @@
         // ═══════════════════════════════════════════════════════════
         // DRAG / RESIZE / ROTATE
         // ═══════════════════════════════════════════════════════════
+        function getEvP(e){ return e.touches && e.touches.length > 0 ? e.touches[0] : e; }
         function startDrag(ev, id) {
-            if (ev.button !== 0) return; ev.preventDefault(); ev.stopPropagation();
+            if (ev.button !== undefined && ev.button !== 0) return; if(ev.cancelable !== false) ev.preventDefault(); ev.stopPropagation();
             selEl(id); const el = gEl(id); if (!el) return; const t = ev.target;
+            const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY;
             if (t.classList.contains('rh')) {
-                S.rsz = { id, sx: ev.clientX, sy: ev.clientY, ow: el.w, oh: el.h };
-                document.addEventListener('mousemove', doRsz); document.addEventListener('mouseup', stopRsz);
+                S.rsz = { id, sx: cx, sy: cy, ow: el.w, oh: el.h };
+                document.addEventListener('mousemove', doRsz); document.addEventListener('touchmove', doRsz, {passive: false});
+                document.addEventListener('mouseup', stopRsz); document.addEventListener('touchend', stopRsz);
             } else if (t.classList.contains('roh')) {
                 const d = document.querySelector(`[data-id="${id}"]`); const rc = d.getBoundingClientRect();
                 S.rot = { id, cx: rc.left + rc.width / 2, cy: rc.top + rc.height / 2 };
-                document.addEventListener('mousemove', doRot); document.addEventListener('mouseup', stopRot);
+                document.addEventListener('mousemove', doRot); document.addEventListener('touchmove', doRot, {passive: false});
+                document.addEventListener('mouseup', stopRot); document.addEventListener('touchend', stopRot);
             } else {
-                S.drag = { id, sx: ev.clientX, sy: ev.clientY, ox: el.x, oy: el.y };
-                document.addEventListener('mousemove', doDrag); document.addEventListener('mouseup', stopDrag);
+                S.drag = { id, sx: cx, sy: cy, ox: el.x, oy: el.y };
+                document.addEventListener('mousemove', doDrag); document.addEventListener('touchmove', doDrag, {passive: false});
+                document.addEventListener('mouseup', stopDrag); document.addEventListener('touchend', stopDrag);
             }
         }
-        function doDrag(ev) { if (!S.drag) return; const el = gEl(S.drag.id); if (!el) return; el.x = S.drag.ox + (ev.clientX - S.drag.sx) / S.zoom; el.y = S.drag.oy + (ev.clientY - S.drag.sy) / S.zoom; const d = document.querySelector(`[data-id="${S.drag.id}"]`); if (d) { d.style.left = el.x * S.zoom + 'px'; d.style.top = el.y * S.zoom + 'px'; } }
-        function stopDrag() { if (S.drag) { saveU(); updateProps(); } S.drag = null; document.removeEventListener('mousemove', doDrag); document.removeEventListener('mouseup', stopDrag); }
-        function doRsz(ev) { if (!S.rsz) return; const el = gEl(S.rsz.id); if (!el) return; el.w = Math.max(10, S.rsz.ow + (ev.clientX - S.rsz.sx) / S.zoom); el.h = Math.max(10, S.rsz.oh + (ev.clientY - S.rsz.sy) / S.zoom); render(); updateProps(); }
-        function stopRsz() { if (S.rsz) saveU(); S.rsz = null; document.removeEventListener('mousemove', doRsz); document.removeEventListener('mouseup', stopRsz); }
-        function doRot(ev) { if (!S.rot) return; const el = gEl(S.rot.id); if (!el) return; el.rot = Math.round(Math.atan2(ev.clientY - S.rot.cy, ev.clientX - S.rot.cx) * 180 / Math.PI + 90); const d = document.querySelector(`[data-id="${S.rot.id}"]`); if (d) d.style.transform = `rotate(${el.rot}deg)`; }
-        function stopRot() { if (S.rot) { saveU(); updateProps(); } S.rot = null; document.removeEventListener('mousemove', doRot); document.removeEventListener('mouseup', stopRot); }
+        function doDrag(ev) { if (!S.drag) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.drag.id); if (!el) return; el.x = S.drag.ox + (cx - S.drag.sx) / S.zoom; el.y = S.drag.oy + (cy - S.drag.sy) / S.zoom; const d = document.querySelector(`[data-id="${S.drag.id}"]`); if (d) { d.style.left = el.x * S.zoom + 'px'; d.style.top = el.y * S.zoom + 'px'; } }
+        function stopDrag() { if (S.drag) { saveU(); updateProps(); } S.drag = null; document.removeEventListener('mousemove', doDrag); document.removeEventListener('touchmove', doDrag); document.removeEventListener('mouseup', stopDrag); document.removeEventListener('touchend', stopDrag); }
+        function doRsz(ev) { if (!S.rsz) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rsz.id); if (!el) return; el.w = Math.max(10, S.rsz.ow + (cx - S.rsz.sx) / S.zoom); el.h = Math.max(10, S.rsz.oh + (cy - S.rsz.sy) / S.zoom); render(); updateProps(); }
+        function stopRsz() { if (S.rsz) saveU(); S.rsz = null; document.removeEventListener('mousemove', doRsz); document.removeEventListener('touchmove', doRsz); document.removeEventListener('mouseup', stopRsz); document.removeEventListener('touchend', stopRsz); }
+        function doRot(ev) { if (!S.rot) return; if(ev.cancelable !== false) ev.preventDefault(); const cx = getEvP(ev).clientX, cy = getEvP(ev).clientY; const el = gEl(S.rot.id); if (!el) return; el.rot = Math.round(Math.atan2(cy - S.rot.cy, cx - S.rot.cx) * 180 / Math.PI + 90); const d = document.querySelector(`[data-id="${S.rot.id}"]`); if (d) d.style.transform = `rotate(${el.rot}deg)`; }
+        function stopRot() { if (S.rot) { saveU(); updateProps(); } S.rot = null; document.removeEventListener('mousemove', doRot); document.removeEventListener('touchmove', doRot); document.removeEventListener('mouseup', stopRot); document.removeEventListener('touchend', stopRot); }
 
         function wclick(ev) { if (ev.target.id === 'cwrap' || ev.target.classList.contains('tcard')) { S.sel = null; render(); updateProps(); } hideCtx(); }
 
