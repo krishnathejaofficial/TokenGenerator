@@ -1235,7 +1235,7 @@
             <div class="sec">
                 <div class="shd">PDF Layout & Download</div>
                 <div class="f"><label>Export Quality</label>
-                    <select id="dlqual">
+                    <select id="dlqual" onchange="updateLayoutPreview()">
                         <option value="1">Standard (72 DPI)</option>
                         <option value="2" selected>High (144 DPI)</option>
                         <option value="4">Maximum (288 DPI)</option>
@@ -1277,6 +1277,7 @@
                         <div class="f"><label>Back Pages</label><input type="text" id="pgback" value="—" disabled style="text-align:center;font-weight:bold;color:var(--a2)"></div>
                     </div>
                     <div id="pginfo" style="font-size:10px;color:var(--a4);margin-top:4px">Set total tokens & per-page to see page estimate</div>
+                    <div id="pgsizeest" style="margin-top:5px;padding:5px 8px;background:var(--bg);border:1px solid var(--bd);border-radius:4px;font-size:11px;color:var(--ac);font-weight:bold;text-align:center">📦 Est. PDF size: —</div>
                 </div>
                 <!-- BACK SIDE OPTIONS -->
                 <div style="background:var(--p2);border:1px solid var(--bd);border-radius:5px;padding:8px 10px;margin-bottom:8px">
@@ -2401,6 +2402,27 @@
                     txt += ` ⚠️ Only ${actualFit} fit on page (${tpp} requested)`;
                 }
                 info.textContent = txt;
+            }
+
+            // Estimated PDF file size
+            const qm = parseInt(gv('dlqual')) || 2;
+            const cardPixels = (S.cw * qm) * (S.ch * qm);
+            // JPEG ~0.15 bytes/pixel at q=0.92 for typical token content, varies by complexity
+            const bytesPerToken = cardPixels * 0.15;
+            const totalTokenImages = total + (incBack ? (sameBack ? perPage : total) : 0);
+            // PDF overhead ~2KB per page + header
+            const pdfOverhead = totalPages * 2048 + 1024;
+            const estBytes = totalTokenImages * bytesPerToken + pdfOverhead;
+            const estMB = estBytes / (1024 * 1024);
+            const sizeEl = document.getElementById('pgsizeest');
+            if (sizeEl) {
+                const dpiLabel = {1:'72', 2:'144', 4:'288', 8:'576'}[qm] || (qm*72);
+                if (estMB < 1) {
+                    sizeEl.textContent = `📦 Est. PDF: ~${Math.round(estBytes/1024)} KB (${dpiLabel} DPI, ${totalPages} page${totalPages>1?'s':''})`;
+                } else {
+                    sizeEl.textContent = `📦 Est. PDF: ~${estMB.toFixed(1)} MB (${dpiLabel} DPI, ${totalPages} page${totalPages>1?'s':''})`;
+                }
+                sizeEl.style.color = estMB > 50 ? 'var(--dg)' : estMB > 15 ? '#f7b731' : 'var(--ac)';
             }
         }
 
